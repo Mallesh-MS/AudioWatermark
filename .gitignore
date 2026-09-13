@@ -1,0 +1,26 @@
+﻿# Gradle files
+.gradle/
+build/
+*.class
+
+# Android Studio
+.idea/
+*.iml
+local.properties
+
+# Host song (too large for git; see docs/SETUP.md for how to generate it)
+app/src/main/res/raw/host_song.wav
+
+# Keystore files (never commit these)
+*.jks
+*.keystore
+
+# Generated APKs
+*.apk
+*.aab
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db

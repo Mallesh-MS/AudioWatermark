@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand / Accent Colors -->
+    <color name="primary">#2563EB</color>
+    <color name="primary_variant">#1D4ED8</color>
+    <color name="primary_container">#DBEAFE</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="on_primary_container">#1E40AF</color>
+
+    <color name="secondary">#0D9488</color>
+    <color name="secondary_variant">#0F766E</color>
+    <color name="secondary_container">#CCFBF1</color>
+    <color name="on_secondary">#FFFFFF</color>
+    <color name="on_secondary_container">#115E59</color>
+
+    <!-- Surfaces & Backgrounds -->
+    <color name="bg_app">#F8FAFC</color>
+    <color name="surface_card">#FFFFFF</color>
+    <color name="text_primary">#0F172A</color>
+    <color name="text_secondary">#64748B</color>
+
+    <!-- Person A Section -->
+    <color name="person_a_bg">#FFFFFF</color>
+    <color name="person_a_stroke">#BFDBFE</color>
+    <color name="person_a_header">#1E40AF</color>
+    <color name="person_a_badge_bg">#EFF6FF</color>
+
+    <!-- Person B Section -->
+    <color name="person_b_bg">#FFFFFF</color>
+    <color name="person_b_stroke">#99F6E4</color>
+    <color name="person_b_header">#115E59</color>
+    <color name="person_b_badge_bg">#F0FDFA</color>
+
+    <!-- Status: Idle -->
+    <color name="status_idle_bg">#F8FAFC</color>
+    <color name="status_idle_stroke">#E2E8F0</color>
+    <color name="status_idle_badge_bg">#E2E8F0</color>
+    <color name="status_idle_badge_text">#475569</color>
+    <color name="status_idle_title">#475569</color>
+    <color name="status_idle_text">#334155</color>
+    <color name="status_idle_icon">#64748B</color>
+
+    <!-- Status: In Progress -->
+    <color name="status_progress_bg">#EFF6FF</color>
+    <color name="status_progress_stroke">#93C5FD</color>
+    <color name="status_progress_badge_bg">#BFDBFE</color>
+    <color name="status_progress_badge_text">#1D4ED8</color>
+    <color name="status_progress_title">#1D4ED8</color>
+    <color name="status_progress_text">#1E3A8A</color>
+    <color name="status_progress_icon">#2563EB</color>
+
+    <!-- Status: Success -->
+    <color name="status_success_bg">#ECFDF5</color>
+    <color name="status_success_stroke">#6EE7B7</color>
+    <color name="status_success_badge_bg">#A7F3D0</color>
+    <color name="status_success_badge_text">#047857</color>
+    <color name="status_success_title">#047857</color>
+    <color name="status_success_text">#064E3B</color>
+    <color name="status_success_icon">#059669</color>
+
+    <!-- Status: No Signal -->
+    <color name="status_nosignal_bg">#FFFBEB</color>
+    <color name="status_nosignal_stroke">#FCD34D</color>
+    <color name="status_nosignal_badge_bg">#FDE68A</color>
+    <color name="status_nosignal_badge_text">#B45309</color>
+    <color name="status_nosignal_title">#B45309</color>
+    <color name="status_nosignal_text">#78350F</color>
+    <color name="status_nosignal_icon">#D97706</color>
+
+    <!-- Status: No Preamble Lock -->
+    <color name="status_preamble_bg">#FFF7ED</color>
+    <color name="status_preamble_stroke">#FDBA74</color>
+    <color name="status_preamble_badge_bg">#FED7AA</color>
+    <color name="status_preamble_badge_text">#C2410C</color>
+    <color name="status_preamble_title">#C2410C</color>
+    <color name="status_preamble_text">#7C2D12</color>
+    <color name="status_preamble_icon">#EA580C</color>
+
+    <!-- Status: Decrypt Failed -->
+    <color name="status_decrypt_bg">#FEF2F2</color>
+    <color name="status_decrypt_stroke">#FCA5A5</color>
+    <color name="status_decrypt_badge_bg">#FECACA</color>
+    <color name="status_decrypt_badge_text">#B91C1C</color>
+    <color name="status_decrypt_title">#B91C1C</color>
+    <color name="status_decrypt_text">#7F1D1D</color>
+    <color name="status_decrypt_icon">#DC2626</color>
+
+    <!-- Status: Garbage Output -->
+    <color name="status_garbage_bg">#FAF5FF</color>
+    <color name="status_garbage_stroke">#D8B4FE</color>
+    <color name="status_garbage_badge_bg">#E9D5FF</color>
+    <color name="status_garbage_badge_text">#7E22CE</color>
+    <color name="status_garbage_title">#7E22CE</color>
+    <color name="status_garbage_text">#581C87</color>
+    <color name="status_garbage_icon">#9333EA</color>
+
+    <!-- Status: Generic Error / Warning -->
+    <color name="status_error_bg">#FEF2F2</color>
+    <color name="status_error_stroke">#FCA5A5</color>
+    <color name="status_error_badge_bg">#FECACA</color>
+    <color name="status_error_badge_text">#B91C1C</color>
+    <color name="status_error_title">#B91C1C</color>
+    <color name="status_error_text">#7F1D1D</color>
+    <color name="status_error_icon">#DC2626</color>
+</resources>
