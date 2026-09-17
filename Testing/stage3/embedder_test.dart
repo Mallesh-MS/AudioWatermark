@@ -156,7 +156,7 @@ void main() {
     });
 
     test('6. Real file end-to-end (if fixture WAV exists)', () {
-      final fixturesDir = Directory('test/fixtures');
+      final fixturesDir = Directory('../Testing/stage3/fixtures');
       if (!fixturesDir.existsSync()) {
         // No fixtures directory — generate a synthetic WAV to stand in
         // for a real host song, so we still exercise the full
@@ -179,7 +179,7 @@ void main() {
 
       if (wavFiles.isEmpty) {
         // Skip gracefully if no WAV files available
-        markTestSkipped('No WAV files found in test/fixtures/');
+        markTestSkipped('No WAV files found in ../Testing/stage3/fixtures/');
         return;
       }
 

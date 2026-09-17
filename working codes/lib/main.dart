@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'audio/pipeline_test_screen.dart';
+import 'ui/stage5_test_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +12,7 @@ class AudioWatermarkApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Audio Watermark Pipeline Test',
+      title: 'Audio Watermark Stage 5 Test',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: const Color(0xFF121418),
@@ -21,7 +21,7 @@ class AudioWatermarkApp extends StatelessWidget {
           secondary: Colors.amberAccent,
         ),
       ),
-      home: const PipelineTestScreen(),
+      home: const Stage5TestScreen(),
     );
   }
 }
