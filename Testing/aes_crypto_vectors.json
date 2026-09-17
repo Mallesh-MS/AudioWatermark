@@ -1,0 +1,38 @@
+{
+  "stage": "crypto_stage_1",
+  "notes": {
+    "iv_strategy": "fixed zero IV",
+    "mode": "AES-128-CTR",
+    "padding": "none",
+    "ciphertext_length": "equals plaintext UTF-8 length"
+  },
+  "fixed_iv_hex": "00000000000000000000000000000000",
+  "keys": [
+    {
+      "label": "key_alpha",
+      "key_hex": "00112233445566778899aabbccddeeff"
+    },
+    {
+      "label": "key_beta",
+      "key_hex": "ffeeddccbbaa99887766554433221100"
+    }
+  ],
+  "messages": [
+    {
+      "label": "short",
+      "plaintext": "A"
+    },
+    {
+      "label": "medium",
+      "plaintext": "hello watermark"
+    },
+    {
+      "label": "long",
+      "plaintext": "This is a longer payload intended to verify that AES-CTR encryption preserves the exact UTF-8 byte length without padding."
+    },
+    {
+      "label": "unicode",
+      "plaintext": "café, mañana, and 🚀"
+    }
+  ]
+}

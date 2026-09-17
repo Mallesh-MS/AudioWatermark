@@ -3,6 +3,7 @@ import 'package:encrypt/encrypt.dart' as enc;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../audio/embedder.dart';
 import '../audio/audio_receiver.dart';
 import '../audio/audio_transmitter.dart';
 import '../audio/calibration_screen.dart';
@@ -128,24 +129,21 @@ class _PipelineTestScreenState extends State<PipelineTestScreen> {
       _txStatus = 'Preparing transmission...';
     });
 
+    final mixedSamples = Embedder.embedMessage(message, _activeKey, host);
     await AudioTransmitter.transmit(
-      message: message,
-      key: _activeKey,
-      hostSamples: host,
+      mixedSamples,
       onStatus: (status) {
         if (mounted) {
           setState(() => _txStatus = status);
         }
       },
-      onDone: () {
-        if (mounted) {
-          setState(() {
-            _isTxActive = false;
-            _txStatus = 'Playback finished.';
-          });
-        }
-      },
     );
+    if (mounted) {
+      setState(() {
+        _isTxActive = false;
+        _txStatus = 'Playback finished.';
+      });
+    }
   }
 
   Future<void> _startListening() async {
@@ -156,13 +154,8 @@ class _PipelineTestScreenState extends State<PipelineTestScreen> {
     });
 
     await AudioReceiver.startListening(
-      key: _activeKey,
-      onStatus: (status) {
-        if (mounted) {
-          setState(() => _rxStatus = status);
-        }
-      },
-      onResult: (result) {
+      Uint8List.fromList(_activeKey.bytes),
+      (result) {
         if (mounted) {
           setState(() {
             _isRxActive = false;
@@ -171,6 +164,11 @@ class _PipelineTestScreenState extends State<PipelineTestScreen> {
                 ? 'Message received!'
                 : 'Listening stopped (no message).';
           });
+        }
+      },
+      onStatus: (status) {
+        if (mounted) {
+          setState(() => _rxStatus = status);
         }
       },
     );
