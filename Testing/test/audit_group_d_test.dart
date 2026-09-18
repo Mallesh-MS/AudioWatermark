@@ -73,32 +73,31 @@ void main() {
       );
     });
 
-    test('Declared data size > buffer size throws RangeError instead of typed error', () {
-      // Declared data size 100,000 bytes, but actual audio data has 0 bytes:
+    test('Declared data size > buffer size raises ArgumentError', () {
       final wav = createWavHeader(dataSize: 100000);
-      // In WavUtils: allocates List<double>.filled(50000, 0.0), then in loop calls getInt16(44)
-      // which throws unhandled RangeError instead of ArgumentError:
       expect(
         () => WavUtils.readWavBytes(wav),
-        throwsA(isA<RangeError>()),
-        reason: 'DEFECT: Spoofed data size leads to unhandled RangeError rather than ArgumentError',
+        throwsArgumentError,
+        reason: 'Bounds check prevents RangeError/OOM on spoofed data size',
       );
     });
 
-    test('Zero channels causes IntegerDivisionByZeroException / UnsupportedError', () {
+    test('Zero channels raises ArgumentError', () {
       final wav = createWavHeader(numChannels: 0, dataSize: 100);
-      // WavUtils line 89: totalFrames = totalSampleValues ~/ numChannels (div by zero!)
       expect(
         () => WavUtils.readWavBytes(wav),
-        throwsA(anyOf(isA<UnsupportedError>(), isA<IntegerDivisionByZeroException>())),
-        reason: 'DEFECT: Zero channels causes uncaught division by zero exception',
+        throwsArgumentError,
+        reason: 'Zero channels is rejected before division',
       );
     });
 
-    test('Zero sample rate is silently accepted without validation', () {
+    test('Zero sample rate raises ArgumentError', () {
       final wav = createWavHeader(sampleRate: 0, dataSize: 0);
-      final wavData = WavUtils.readWavBytes(wav);
-      expect(wavData.sampleRate, equals(0), reason: 'DEFECT: Zero sample rate is accepted silently');
+      expect(
+        () => WavUtils.readWavBytes(wav),
+        throwsArgumentError,
+        reason: 'Zero sample rate is strictly rejected',
+      );
     });
 
     test('24-bit PCM raises typed ArgumentError', () {

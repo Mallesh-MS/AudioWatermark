@@ -75,12 +75,21 @@ class WavUtils {
       );
     }
     final numChannels = data.getUint16(fmtOffset + 2, Endian.little);
+    if (numChannels < 1 || numChannels > 2) {
+      throw ArgumentError('Unsupported channel count $numChannels (only 1 or 2 supported)');
+    }
     final sampleRate = data.getUint32(fmtOffset + 4, Endian.little);
+    if (sampleRate <= 0) {
+      throw ArgumentError('Invalid sample rate $sampleRate');
+    }
     final bitsPerSample = data.getUint16(fmtOffset + 14, Endian.little);
     if (bitsPerSample != 16) {
       throw ArgumentError(
         'Unsupported bit depth $bitsPerSample (only 16-bit PCM is supported)',
       );
+    }
+    if (dataOffset + dataSize > bytes.length) {
+      throw ArgumentError('Declared data chunk size exceeds available buffer length');
     }
 
     // --- Read PCM samples ---

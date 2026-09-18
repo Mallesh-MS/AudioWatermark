@@ -57,7 +57,7 @@ void main() {
       expect(extracted, isNull, reason: 'Length 1 (payload + CRC requires >= 2 bytes) must return null cleanly');
     });
 
-    test('Length field 255 with truncated stream throws unhandled RangeError in Decoder', () {
+    test('Length field 255 with truncated stream safely returns empty without RangeError', () {
       final preamble = ToneGenerator.generatePreamble();
       final lengthBits255 = ToneGenerator.bytesToBits([255]);
       final header255Bits = [...lengthBits255, ...lengthBits255, ...lengthBits255];
@@ -67,11 +67,7 @@ void main() {
       }
       samples.addAll(List<double>.filled(100, 0.0));
 
-      expect(
-        () => Decoder.decodeLengthPrefixedBits(samples),
-        throwsA(isA<RangeError>()),
-        reason: 'Decoder.decodeLengthPrefixedBits throws unhandled RangeError on truncated streams',
-      );
+      expect(Decoder.decodeLengthPrefixedBits(samples), isEmpty);
 
       final key = WatermarkCrypto.generateKey();
       expect(Embedder.extractMessage(samples, key), isNull);

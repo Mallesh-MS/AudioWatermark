@@ -146,10 +146,16 @@ class Decoder {
       throw StateError('Preamble not found');
     }
     final headerSamples = samples.sublist(preambleEnd);
+    if (headerSamples.length < 24 * _symbolSamples) {
+      return [];
+    }
     final rawHeaderBits = readBits(headerSamples, 24);
     final byteLength = majorityVoteHeader(rawHeaderBits);
     final payloadStart = 24 * _symbolSamples;
     final payload = headerSamples.sublist(payloadStart);
+    if (payload.length < byteLength * 8 * _symbolSamples) {
+      return [];
+    }
     return readBits(payload, byteLength * 8);
   }
 

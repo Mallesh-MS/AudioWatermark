@@ -47,8 +47,18 @@ class ToneGenerator {
 
   static List<double> bitsToSamples(List<int> bits) {
     final samples = generatePreamble();
+    double currentPhase = (2 * pi * preambleFreq * _preambleSamples / sampleRate) % (2 * pi);
     for (final bit in bits) {
-      samples.addAll(generateSymbol(bit));
+      if (bit != 0 && bit != 1) {
+        throw ArgumentError.value(bit, 'bit', 'must be 0 or 1');
+      }
+      final freq = bit == 0 ? bit0Freq : bit1Freq;
+      final phaseInc = 2 * pi * freq / sampleRate;
+      for (int i = 0; i < _symbolSamples; i++) {
+        samples.add(TuningConfig.amplitude * sin(currentPhase));
+        currentPhase += phaseInc;
+      }
+      currentPhase %= (2 * pi);
     }
     return samples;
   }
