@@ -4,11 +4,11 @@ import 'dart:math';
 import 'package:encrypt/encrypt.dart';
 import 'package:test/test.dart';
 
-import 'package:audio_watermark/audio/embedder.dart';
-import 'package:audio_watermark/audio/wav_utils.dart';
-import 'package:audio_watermark/dsp/aes_crypto.dart';
-import 'package:audio_watermark/dsp/protocol.dart';
-import 'package:audio_watermark/dsp/tone_generator.dart';
+import 'package:dsp/audio/embedder.dart';
+import 'package:dsp/audio/wav_utils.dart';
+import 'package:dsp/dsp/aes_crypto.dart';
+import 'package:dsp/dsp/protocol.dart';
+import 'package:dsp/dsp/tone_generator.dart';
 
 /// Generates a synthetic "music" host sample array: a mix of low-frequency
 /// sines (220, 440, 880 Hz) at moderate amplitude, with no significant energy
@@ -156,7 +156,7 @@ void main() {
     });
 
     test('6. Real file end-to-end (if fixture WAV exists)', () {
-      final fixturesDir = Directory('../Testing/stage3/fixtures');
+      final fixturesDir = Directory('fixtures');
       if (!fixturesDir.existsSync()) {
         // No fixtures directory — generate a synthetic WAV to stand in
         // for a real host song, so we still exercise the full
@@ -179,7 +179,7 @@ void main() {
 
       if (wavFiles.isEmpty) {
         // Skip gracefully if no WAV files available
-        markTestSkipped('No WAV files found in ../Testing/stage3/fixtures/');
+        markTestSkipped('No WAV files found in fixtures/');
         return;
       }
 

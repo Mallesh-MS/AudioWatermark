@@ -1,0 +1,9 @@
+const int sampleRate = 44100;
+const double preambleFreq = 17000.0;
+const double preambleDurationMs = 300.0;
+const double bit0Freq = 18000.0;
+const double bit1Freq = 19500.0;
+const double defaultSymbolDurationMs = 100.0;
+const double symbolDurationMs = defaultSymbolDurationMs;
+const double watermarkAmplitude = 0.025; // Tuned in Stage 6 (from 0.020) for optimal two-device SNR & inaudibility
+const double defaultPreambleThreshold = 1.0;

@@ -2,9 +2,9 @@ import 'dart:typed_data';
 
 import 'package:test/test.dart';
 
-import 'package:audio_watermark/dsp/aes_crypto.dart';
-import 'package:audio_watermark/dsp/decoder.dart';
-import 'package:audio_watermark/dsp/tone_generator.dart';
+import 'package:dsp/dsp/aes_crypto.dart';
+import 'package:dsp/dsp/decoder.dart';
+import 'package:dsp/dsp/tone_generator.dart';
 
 void main() {
   group('ToneGenerator and Decoder', () {

@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'package:test/test.dart';
 
-import 'package:audio_watermark/audio/embedder.dart';
-import 'package:audio_watermark/audio/wav_utils.dart';
-import 'package:audio_watermark/dsp/aes_crypto.dart';
-import 'package:audio_watermark/dsp/protocol.dart';
+import 'package:dsp/audio/embedder.dart';
+import 'package:dsp/audio/wav_utils.dart';
+import 'package:dsp/dsp/aes_crypto.dart';
+import 'package:dsp/dsp/protocol.dart';
 
 List<double> _generateSyntheticHost(double durationSeconds) {
   final count = (sampleRate * durationSeconds).round();

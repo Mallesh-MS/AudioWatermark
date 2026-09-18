@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 import 'package:test/test.dart';
 
-import 'package:audio_watermark/audio/wav_utils.dart';
-import 'package:audio_watermark/dsp/decoder.dart';
-import 'package:audio_watermark/dsp/protocol.dart';
-import 'package:audio_watermark/dsp/tone_generator.dart';
+import 'package:dsp/audio/wav_utils.dart';
+import 'package:dsp/dsp/decoder.dart';
+import 'package:dsp/dsp/protocol.dart';
+import 'package:dsp/dsp/tone_generator.dart';
 
 void main() {
   group('Stage 4 DSP & Helper Tests', () {

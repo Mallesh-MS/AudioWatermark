@@ -1,0 +1,22 @@
+name: signal_testing
+description: DSP and audio watermarking test package.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  dsp:
+    path: ../DSP
+  encrypt: ^5.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  test: ^1.31.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - fixtures/
