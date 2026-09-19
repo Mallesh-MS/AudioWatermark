@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark Mode Brand / Accent Colors -->
+    <color name="primary">#60A5FA</color>
+    <color name="primary_variant">#3B82F6</color>
+    <color name="primary_container">#1E3A8A</color>
+    <color name="on_primary">#0F172A</color>
+    <color name="on_primary_container">#DBEAFE</color>
+
+    <color name="secondary">#2DD4BF</color>
+    <color name="secondary_variant">#14B8A6</color>
+    <color name="secondary_container">#134E4A</color>
+    <color name="on_secondary">#0F172A</color>
+    <color name="on_secondary_container">#CCFBF1</color>
+
+    <!-- Surfaces & Backgrounds -->
+    <color name="bg_app">#101418</color>
+    <color name="surface_card">#181D23</color>
+    <color name="surface_card_secondary">#222831</color>
+    <color name="card_stroke">#2A323D</color>
+    <color name="text_primary">#F1F5F9</color>
+    <color name="text_secondary">#AAB4C0</color>
+    <color name="text_muted">#6B7A8B</color>
+    <color name="divider_color">#2A323D</color>
+
+    <!-- Chips & Presets -->
+    <color name="chip_bg">#222831</color>
+    <color name="chip_stroke">#374151</color>
+    <color name="chip_text">#E2E8F0</color>
+    <color name="success_message_bg">#064E3B</color>
+    <color name="success_message_border">#059669</color>
+    <color name="success_message_text">#A7F3D0</color>
+
+    <!-- Range Profile Section -->
+    <color name="range_card_bg">#181D23</color>
+    <color name="range_card_stroke">#312E81</color>
+    <color name="range_accent">#818CF8</color>
+    <color name="range_badge_bg">#1E1B4B</color>
+
+    <!-- Person A Section -->
+    <color name="person_a_bg">#181D23</color>
+    <color name="person_a_stroke">#1E3A8A</color>
+    <color name="person_a_header">#93C5FD</color>
+    <color name="person_a_badge_bg">#172554</color>
+
+    <!-- Person B Section -->
+    <color name="person_b_bg">#181D23</color>
+    <color name="person_b_stroke">#134E4A</color>
+    <color name="person_b_header">#5EEAD4</color>
+    <color name="person_b_badge_bg">#042F2E</color>
+
+    <!-- Status: Idle -->
+    <color name="status_idle_bg">#181D23</color>
+    <color name="status_idle_stroke">#2A323D</color>
+    <color name="status_idle_badge_bg">#222831</color>
+    <color name="status_idle_badge_text">#94A3B8</color>
+    <color name="status_idle_title">#CBD5E1</color>
+    <color name="status_idle_text">#E2E8F0</color>
+    <color name="status_idle_icon">#94A3B8</color>
+
+    <!-- Status: In Progress -->
+    <color name="status_progress_bg">#172554</color>
+    <color name="status_progress_stroke">#2563EB</color>
+    <color name="status_progress_badge_bg">#1E3A8A</color>
+    <color name="status_progress_badge_text">#93C5FD</color>
+    <color name="status_progress_title">#BFDBFE</color>
+    <color name="status_progress_text">#DBEAFE</color>
+    <color name="status_progress_icon">#60A5FA</color>
+
+    <!-- Status: Success -->
+    <color name="status_success_bg">#064E3B</color>
+    <color name="status_success_stroke">#059669</color>
+    <color name="status_success_badge_bg">#065F46</color>
+    <color name="status_success_badge_text">#6EE7B7</color>
+    <color name="status_success_title">#A7F3D0</color>
+    <color name="status_success_text">#D1FAE5</color>
+    <color name="status_success_icon">#34D399</color>
+
+    <!-- Status: No Signal -->
+    <color name="status_nosignal_bg">#451A03</color>
+    <color name="status_nosignal_stroke">#B45309</color>
+    <color name="status_nosignal_badge_bg">#78350F</color>
+    <color name="status_nosignal_badge_text">#FDE68A</color>
+    <color name="status_nosignal_title">#FCD34D</color>
+    <color name="status_nosignal_text">#FEF3C7</color>
+    <color name="status_nosignal_icon">#FBBF24</color>
+
+    <!-- Status: No Preamble Lock -->
+    <color name="status_preamble_bg">#431407</color>
+    <color name="status_preamble_stroke">#C2410C</color>
+    <color name="status_preamble_badge_bg">#7C2D12</color>
+    <color name="status_preamble_badge_text">#FED7AA</color>
+    <color name="status_preamble_title">#FDBA74</color>
+    <color name="status_preamble_text">#FFEDD5</color>
+    <color name="status_preamble_icon">#FB923C</color>
+
+    <!-- Status: Decrypt Failed -->
+    <color name="status_decrypt_bg">#450A0A</color>
+    <color name="status_decrypt_stroke">#DC2626</color>
+    <color name="status_decrypt_badge_bg">#7F1D1D</color>
+    <color name="status_decrypt_badge_text">#FECACA</color>
+    <color name="status_decrypt_title">#FCA5A5</color>
+    <color name="status_decrypt_text">#FEE2E2</color>
+    <color name="status_decrypt_icon">#F87171</color>
+
+    <!-- Status: Garbage Output -->
+    <color name="status_garbage_bg">#3B0764</color>
+    <color name="status_garbage_stroke">#9333EA</color>
+    <color name="status_garbage_badge_bg">#581C87</color>
+    <color name="status_garbage_badge_text">#E9D5FF</color>
+    <color name="status_garbage_title">#D8B4FE</color>
+    <color name="status_garbage_text">#F3E8FF</color>
+    <color name="status_garbage_icon">#C084FC</color>
+
+    <!-- Status: Generic Error / Warning -->
+    <color name="status_error_bg">#450A0A</color>
+    <color name="status_error_stroke">#DC2626</color>
+    <color name="status_error_badge_bg">#7F1D1D</color>
+    <color name="status_error_badge_text">#FECACA</color>
+    <color name="status_error_title">#FCA5A5</color>
+    <color name="status_error_text">#FEE2E2</color>
+    <color name="status_error_icon">#F87171</color>
+</resources>

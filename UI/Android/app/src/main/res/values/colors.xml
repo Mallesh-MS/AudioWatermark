@@ -14,11 +14,14 @@
     <color name="on_secondary_container">#115E59</color>
 
     <!-- Surfaces & Backgrounds -->
-    <color name="bg_app">#F8FAFC</color>
+    <color name="bg_app">#F7F8FA</color>
     <color name="surface_card">#FFFFFF</color>
-    <color name="text_primary">#0F172A</color>
-    <color name="text_secondary">#64748B</color>
-    <color name="text_muted">#94A3B8</color>
+    <color name="surface_card_secondary">#F1F5F9</color>
+    <color name="card_stroke">#D9DEE5</color>
+    <color name="text_primary">#17202A</color>
+    <color name="text_secondary">#5F6B76</color>
+    <color name="text_muted">#8A96A3</color>
+    <color name="divider_color">#E2E8F0</color>
 
     <!-- Chips & Presets -->
     <color name="chip_bg">#F1F5F9</color>

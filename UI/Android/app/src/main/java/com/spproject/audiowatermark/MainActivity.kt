@@ -20,14 +20,15 @@ import com.spproject.audiowatermark.databinding.ActivityMainBinding
 import java.io.File
 
 /**
- * Single-screen UI wiring together the transmitter and receiver.
- * Supports:
- *   • Local acoustic transmission via phone speaker & mic (17–20 kHz)
- *   • 20 km / Global Digital Steganography via Audio File Export & Sharing (WhatsApp/Telegram/Drive)
- *   • Audio File Picking & Instant Decoding
- *   • Encoding Profiles (Standard Fast vs High Robustness)
- *   • Quick Test Presets: HELLO, PASS_2026, PAY_100, SHARE_20KM
- *   • Decoded Message copy-to-clipboard and signal diagnostics
+ * Modern, accessible UI/UX controller for Acoustic Audio Watermarking & Steganography.
+ *
+ * Provides:
+ *   • Bottom navigation across Home, Send, Receive, and Settings & Help.
+ *   • Guided 4-step transmission flow for beginners and non-technical users.
+ *   • Dedicated reception experience with audio proximity diagrams and direct WAV decoding.
+ *   • Full Level 1 (What am I doing), Level 2 (What to choose), and Level 3 (Engineering metrics) hierarchy.
+ *   • End-to-end AES-128 secret key encryption/decryption with failure diagnosis.
+ *   • Accessibility features: Large buttons, system text scaling resilience, and Reduce Motion.
  */
 class MainActivity : AppCompatActivity() {
 
@@ -54,11 +55,12 @@ class MainActivity : AppCompatActivity() {
     private val micPermissionLauncher = registerForActivityResult(
         androidx.activity.result.contract.ActivityResultContracts.RequestPermission()
     ) { granted ->
+        updateMicPermissionDisplay()
         if (granted) {
             startListening()
         } else {
-            setStatus(
-                "⚠ Microphone permission denied — cannot receive acoustic messages.",
+            setReceiveStatus(
+                "❌ Microphone permission denied — cannot capture acoustic sound.",
                 StatusState.ERROR,
                 "PERMISSION DENIED"
             )
@@ -72,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         if (uri != null) {
             decodeSelectedAudioFile(uri)
         } else {
-            setStatus("File selection canceled.", StatusState.IDLE, "CANCELED")
+            setReceiveStatus("File selection canceled.", StatusState.IDLE, "CANCELED")
             setBothButtonsEnabled(true)
         }
     }
@@ -84,10 +86,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupNavigation()
+        setupOnboarding()
         setupRangeModeSelector()
         setupSecretKey()
         setupPresetChips()
         setupMessageInput()
+        setupCarrierMode()
+        setupEngineeringToggle()
+        setupSettingsTab()
 
         binding.btnSend.setOnClickListener        { onSendClicked() }
         binding.btnExportAudio.setOnClickListener { onExportAudioClicked() }
@@ -96,11 +103,10 @@ class MainActivity : AppCompatActivity() {
         binding.btnCopyMessage.setOnClickListener { onCopyClicked() }
 
         updateEstimatedDuration()
-        setStatus(
-            "Ready — Transmit nearby via speaker, OR export watermarked audio to share across 20 km.",
-            StatusState.IDLE,
-            "READY"
-        )
+        updateMicPermissionDisplay()
+
+        setSendStatus("Ready to transmit — tap Send Message over Speaker, or export a file across 20 km.", StatusState.IDLE, "READY")
+        setReceiveStatus("Ready to receive — tap 'Listen Nearby' to capture sound, or 'Open Audio File' to decode a file.", StatusState.IDLE, "READY")
     }
 
     override fun onDestroy() {
@@ -109,13 +115,53 @@ class MainActivity : AppCompatActivity() {
         receiver?.stop()
     }
 
+    // ── Navigation Setup ───────────────────────────────────────────────
+
+    private fun setupNavigation() {
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> switchTab(0)
+                R.id.nav_send -> switchTab(1)
+                R.id.nav_receive -> switchTab(2)
+                R.id.nav_settings -> switchTab(3)
+            }
+            true
+        }
+
+        binding.cardHomeGoSend.setOnClickListener {
+            binding.bottomNavigation.selectedItemId = R.id.nav_send
+        }
+        binding.cardHomeGoReceive.setOnClickListener {
+            binding.bottomNavigation.selectedItemId = R.id.nav_receive
+        }
+    }
+
+    private fun switchTab(index: Int) {
+        binding.tabHome.visibility     = if (index == 0) View.VISIBLE else View.GONE
+        binding.tabSend.visibility     = if (index == 1) View.VISIBLE else View.GONE
+        binding.tabReceive.visibility  = if (index == 2) View.VISIBLE else View.GONE
+        binding.tabSettings.visibility = if (index == 3) View.VISIBLE else View.GONE
+    }
+
+    private fun setupOnboarding() {
+        val prefs = getSharedPreferences("steganography_prefs", Context.MODE_PRIVATE)
+        val dismissed = prefs.getBoolean("onboarding_dismissed", false)
+        if (dismissed) {
+            binding.cardOnboarding.visibility = View.GONE
+        }
+        binding.btnDismissOnboarding.setOnClickListener {
+            binding.cardOnboarding.visibility = View.GONE
+            prefs.edit().putBoolean("onboarding_dismissed", true).apply()
+        }
+    }
+
     // ── Setup Helpers ──────────────────────────────────────────────────
 
     private fun setupSecretKey() {
         binding.chipDefaultKey.setOnClickListener {
             binding.editSecretKey.setText(Config.SHARED_PASSPHRASE)
             binding.editSecretKey.setSelection(binding.editSecretKey.text?.length ?: 0)
-            Toast.makeText(this, "Secret Key set to Default", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Secret Key set to Default Key", Toast.LENGTH_SHORT).show()
         }
         binding.chipCustomKey.setOnClickListener {
             binding.editSecretKey.setText("TOP_SECRET_42")
@@ -151,17 +197,11 @@ class MainActivity : AppCompatActivity() {
                 when (checkedId) {
                     R.id.btnModeStandard -> {
                         Config.activeMode = Config.RangeMode.STANDARD
-                        binding.txtRangeBadge.text = "STANDARD"
-                        binding.txtRangeBadge.setTextColor(ContextCompat.getColor(this, R.color.primary))
-                        binding.txtRangeBadge.setBackgroundResource(R.drawable.bg_badge_primary)
-                        binding.txtRangeDescription.text = Config.activeMode.description
+                        binding.txtRangeDescription.text = "Faster · 10 bps · Normal conditions"
                     }
                     R.id.btnModeLongRange -> {
                         Config.activeMode = Config.RangeMode.LONG_RANGE
-                        binding.txtRangeBadge.text = "HIGH ROBUSTNESS"
-                        binding.txtRangeBadge.setTextColor(ContextCompat.getColor(this, R.color.secondary))
-                        binding.txtRangeBadge.setBackgroundResource(R.drawable.bg_badge_secondary)
-                        binding.txtRangeDescription.text = Config.activeMode.description
+                        binding.txtRangeDescription.text = "More reliable · 5 bps · Better in noise (+6 dB)"
                     }
                 }
                 updateEstimatedDuration()
@@ -198,6 +238,61 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    private fun setupCarrierMode() {
+        binding.switchCarrierMode.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.switchCarrierMode.text = "🔊 Pure Ultrasonic Sound"
+                binding.txtCarrierDescription.text = "High-frequency sound (17–20 kHz) that is difficult for human ears to hear."
+            } else {
+                binding.switchCarrierMode.text = "🎶 Embed in Music"
+                binding.txtCarrierDescription.text = "Hides the message beneath music tracks using acoustic masking."
+            }
+        }
+
+        binding.btnExplainCarrier.setOnClickListener {
+            val isVisible = binding.txtCarrierDetailPanel.visibility == View.VISIBLE
+            binding.txtCarrierDetailPanel.visibility = if (isVisible) View.GONE else View.VISIBLE
+            binding.btnExplainCarrier.text = if (isVisible) "ⓘ How does this work?" else "▲ Hide explanation"
+        }
+    }
+
+    private fun setupEngineeringToggle() {
+        binding.btnToggleEngineeringDetails.setOnClickListener {
+            val isVis = binding.txtEngineeringDetails.visibility == View.VISIBLE
+            binding.txtEngineeringDetails.visibility = if (isVis) View.GONE else View.VISIBLE
+            binding.btnToggleEngineeringDetails.text = if (isVis) "▼ Advanced technical details" else "▲ Hide technical details"
+        }
+    }
+
+    private fun setupSettingsTab() {
+        val prefs = getSharedPreferences("steganography_prefs", Context.MODE_PRIVATE)
+        binding.switchReduceMotion.isChecked = prefs.getBoolean("reduce_motion", false)
+        binding.switchHighContrast.isChecked = prefs.getBoolean("high_contrast", true)
+
+        binding.switchReduceMotion.setOnCheckedChangeListener { _, isChecked ->
+            prefs.edit().putBoolean("reduce_motion", isChecked).apply()
+            Toast.makeText(this, "Reduce Motion: ${if (isChecked) "Enabled" else "Disabled"}", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.switchHighContrast.setOnCheckedChangeListener { _, isChecked ->
+            prefs.edit().putBoolean("high_contrast", isChecked).apply()
+            Toast.makeText(this, "High Contrast: ${if (isChecked) "Enabled" else "Standard"}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateMicPermissionDisplay() {
+        val hasMic = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) ==
+                     PackageManager.PERMISSION_GRANTED
+        binding.txtMicPermissionStatus.text = if (hasMic) {
+            "🎙 Microphone Permission: Granted"
+        } else {
+            "🎙 Microphone Permission: Not Granted (Tap 'Listen Nearby' to request)"
+        }
+        binding.txtMicPermissionStatus.setTextColor(
+            ContextCompat.getColor(this, if (hasMic) R.color.primary else R.color.status_nosignal_title)
+        )
+    }
+
     private fun updateEstimatedDuration() {
         val message = binding.editMessage.text?.toString()?.trim() ?: "HELLO"
         val passphrase = getActivePassphrase()
@@ -214,7 +309,7 @@ class MainActivity : AppCompatActivity() {
         val textToCopy = binding.txtDecodedMessage.text.toString()
         if (textToCopy.isNotBlank()) {
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("Decoded Ultrasonic Message", textToCopy)
+            val clip = ClipData.newPlainText("Decoded Message", textToCopy)
             clipboard.setPrimaryClip(clip)
             Toast.makeText(this, "Copied to clipboard: $textToCopy", Toast.LENGTH_SHORT).show()
         }
@@ -238,7 +333,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             val resId = hostSongResId
             if (resId == 0) {
-                throw IllegalStateException("host_song.wav not found in res/raw/. Switch to Pure Ultrasonic mode or add host_song.wav.")
+                throw IllegalStateException("host_song.wav not found in res/raw/. Switch to Pure Ultrasonic sound or add host_song.wav.")
             }
             val hostSamples = WavUtils.loadWavAsDoubles(this, resId)
             val startIndex = Config.SAMPLE_RATE
@@ -255,13 +350,12 @@ class MainActivity : AppCompatActivity() {
     private fun onSendClicked() {
         val message = binding.editMessage.text?.toString()?.trim() ?: ""
         if (message.isBlank()) {
-            setStatus("⚠ Please type a message or select a preset first.", StatusState.WARNING, "EMPTY MESSAGE")
+            setSendStatus("⚠ Please type a message or select a quick message first.", StatusState.WARNING, "EMPTY MESSAGE")
             return
         }
 
         setBothButtonsEnabled(false)
-        binding.layoutDecodedResult.visibility = View.GONE
-        setStatus("Encrypting for ${Config.activeMode.displayName}…", StatusState.IN_PROGRESS, "ENCRYPTING")
+        setSendStatus("Encrypting message with secret key for ${Config.activeMode.displayName}…", StatusState.IN_PROGRESS, "ENCRYPTING")
 
         Thread {
             try {
@@ -269,26 +363,27 @@ class MainActivity : AppCompatActivity() {
                 val durationSec = audioToPlay.size / Config.SAMPLE_RATE.toDouble()
 
                 runOnUiThread {
-                    val modeLabel = if (binding.switchCarrierMode.isChecked) "pure ultrasonic carrier" else "watermarked song"
-                    setStatus(
-                        "▶ Transmitting $modeLabel (~%.1f s)\nProfile: %s\nPerson B: tap Listen now!".format(durationSec, Config.activeMode.displayName),
+                    val modeLabel = if (binding.switchCarrierMode.isChecked) "pure ultrasonic sound" else "watermarked song"
+                    setSendStatus(
+                        "▶ Transmitting $modeLabel (~%.1f s)\nProfile: %s\nReceiver: tap 'Listen Nearby' now!".format(durationSec, Config.activeMode.displayName),
                         StatusState.IN_PROGRESS,
                         "TRANSMITTING"
                     )
                     transmitter.play(audioToPlay) {
                         runOnUiThread {
-                            setStatus(
-                                "✓ Transmission finished (%.1f s).\nReady for next transmission or reception.".format(durationSec),
+                            setSendStatus(
+                                "✓ Transmission complete (%.1f s).\nReady for next transmission or reception.".format(durationSec),
                                 StatusState.SUCCESS,
-                                "TRANSMIT COMPLETE"
+                                "SENT"
                             )
+                            binding.txtHomeRecentActivity.text = "Last sent: '$message' via ${Config.activeMode.displayName}"
                             setBothButtonsEnabled(true)
                         }
                     }
                 }
             } catch (e: Exception) {
                 runOnUiThread {
-                    setStatus("⚠ ${e.message}", StatusState.ERROR, "ERROR")
+                    setSendStatus("⚠ ${e.message}", StatusState.ERROR, "ERROR")
                     setBothButtonsEnabled(true)
                 }
             }
@@ -301,18 +396,17 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Creates a watermarked 16-bit 44.1 kHz WAV file and shares it via Android system share sheet.
-     * Works over ANY distance (20 km, 2000 km, across the world).
+     * Works across 20 km, 2000 km, or across the world via messaging apps / email / cloud.
      */
     private fun onExportAudioClicked() {
         val message = binding.editMessage.text?.toString()?.trim() ?: ""
         if (message.isBlank()) {
-            setStatus("⚠ Please type a message or select a preset first.", StatusState.WARNING, "EMPTY MESSAGE")
+            setSendStatus("⚠ Please type a message or select a quick message first.", StatusState.WARNING, "EMPTY MESSAGE")
             return
         }
 
         setBothButtonsEnabled(false)
-        binding.layoutDecodedResult.visibility = View.GONE
-        setStatus("Generating watermarked audio file…", StatusState.IN_PROGRESS, "CREATING FILE")
+        setSendStatus("Generating lossless watermarked audio file…", StatusState.IN_PROGRESS, "CREATING FILE")
 
         Thread {
             try {
@@ -330,28 +424,28 @@ class MainActivity : AppCompatActivity() {
 
                 runOnUiThread {
                     setBothButtonsEnabled(true)
-                    setStatus(
+                    setSendStatus(
                         "✓ Watermarked audio file created!\n\n" +
-                        "File: secret_watermarked_audio.wav\n" +
-                        "Size: ${exportFile.length() / 1024} KB\n" +
+                        "File: secret_watermarked_audio.wav (${exportFile.length() / 1024} KB)\n" +
                         "Profile: ${Config.activeMode.displayName}\n\n" +
-                        "Opening share sheet — Send this file via WhatsApp, Telegram, Drive or Email to Person B (20 km away)!",
+                        "Opening share sheet — Send this file via WhatsApp, Telegram, or Drive to Person B (20 km away)!",
                         StatusState.SUCCESS,
                         "FILE READY"
                     )
+                    binding.txtHomeRecentActivity.text = "Last exported file: '$message' for 20 km transfer"
 
                     val shareIntent = Intent(Intent.ACTION_SEND).apply {
                         type = "audio/wav"
                         putExtra(Intent.EXTRA_STREAM, contentUri)
                         putExtra(Intent.EXTRA_SUBJECT, "Secret Watermarked Audio File")
-                        putExtra(Intent.EXTRA_TEXT, "Here is the watermarked audio file. Open it with the Audio Watermark app to decode!")
+                        putExtra(Intent.EXTRA_TEXT, "Here is the encrypted watermarked audio file. Open it with Audio Watermark app to decode!")
                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     }
                     startActivity(Intent.createChooser(shareIntent, "Share Watermarked Audio (20 km)"))
                 }
             } catch (e: Exception) {
                 runOnUiThread {
-                    setStatus("⚠ Failed to export audio: ${e.message}", StatusState.ERROR, "EXPORT FAILED")
+                    setSendStatus("⚠ Failed to export audio: ${e.message}", StatusState.ERROR, "EXPORT FAILED")
                     setBothButtonsEnabled(true)
                 }
             }
@@ -367,7 +461,11 @@ class MainActivity : AppCompatActivity() {
     private fun onListenClicked() {
         val hasMic = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) ==
                      PackageManager.PERMISSION_GRANTED
-        if (hasMic) startListening() else micPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+        if (hasMic) {
+            startListening()
+        } else {
+            micPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+        }
     }
 
     private fun startListening() {
@@ -382,16 +480,16 @@ class MainActivity : AppCompatActivity() {
             onProgressSec = { elapsed ->
                 val remaining = listenSec - elapsed
                 runOnUiThread {
-                    setStatus(
-                        "🎙 Listening for %s signal…\n⏱ %d seconds remaining\n(Person A: press transmit now!)".format(mode.displayName, remaining),
+                    setReceiveStatus(
+                        "🎙 Listening for sound (%s)…\n⏱ %d seconds remaining\n(Sender: press Transmit now!)".format(mode.displayName, remaining),
                         StatusState.IN_PROGRESS,
                         "LISTENING (${remaining}s)"
                     )
                 }
             }
         )
-        setStatus(
-            "🎙 Listening for %s signal (%d s window)…\n(Person A: press transmit now!)".format(mode.displayName, listenSec),
+        setReceiveStatus(
+            "🎙 Listening for %s signal (%d s window)…\n(Sender: press Transmit now!)".format(mode.displayName, listenSec),
             StatusState.IN_PROGRESS,
             "LISTENING"
         )
@@ -408,14 +506,14 @@ class MainActivity : AppCompatActivity() {
     private fun onPickFileClicked() {
         setBothButtonsEnabled(false)
         binding.layoutDecodedResult.visibility = View.GONE
-        setStatus("Select a watermarked WAV audio file to decode…", StatusState.IN_PROGRESS, "SELECTING FILE")
+        setReceiveStatus("Select a watermarked WAV audio file to decode…", StatusState.IN_PROGRESS, "SELECTING FILE")
         filePickerLauncher.launch("audio/*")
     }
 
     private fun decodeSelectedAudioFile(uri: Uri) {
         setBothButtonsEnabled(false)
         binding.layoutDecodedResult.visibility = View.GONE
-        setStatus("Loading audio file and decoding watermark…", StatusState.IN_PROGRESS, "DECODING FILE")
+        setReceiveStatus("Loading audio file and decoding watermark…", StatusState.IN_PROGRESS, "DECODING FILE")
 
         Thread {
             try {
@@ -424,7 +522,7 @@ class MainActivity : AppCompatActivity() {
                 val samples = WavUtils.loadWavFromStreamAsDoubles(inputStream)
 
                 runOnUiThread {
-                    setStatus(
+                    setReceiveStatus(
                         "Analyzing ${samples.size} samples (%.1f s audio)…".format(samples.size / Config.SAMPLE_RATE.toDouble()),
                         StatusState.IN_PROGRESS,
                         "ANALYZING"
@@ -451,8 +549,8 @@ class MainActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 runOnUiThread {
-                    setStatus(
-                        "⚠ Failed to read audio file: ${e.message}\n\nMake sure the file is a 16-bit 44.1 kHz PCM WAV file.",
+                    setReceiveStatus(
+                        "❌ Failed to read audio file: ${e.message}\n\nMake sure the file is a 16-bit 44.1 kHz PCM WAV file.",
                         StatusState.ERROR,
                         "FILE ERROR"
                     )
@@ -473,78 +571,78 @@ class MainActivity : AppCompatActivity() {
             is Decoder.DecodeResult.Success -> {
                 binding.layoutDecodedResult.visibility = View.VISIBLE
                 binding.txtDecodedMessage.text = result.message
+                binding.txtHomeRecentActivity.text = "Last recovered message: '${result.message}'"
 
                 val snrQuality = when {
-                    result.preamblePeakEnergy > 10.0 -> "EXCELLENT (HIGH SNR)"
-                    result.preamblePeakEnergy > 4.0  -> "GOOD (MEDIUM SNR)"
-                    else                             -> "WEAK (LOW SNR - BORDERLINE)"
+                    result.preamblePeakEnergy > 10.0 -> "🟢 Excellent signal"
+                    result.preamblePeakEnergy > 4.0  -> "🟢 Good signal"
+                    else                             -> "🟡 Weak / Borderline signal"
                 }
 
-                setStatus(
-                    "✓ Message decoded successfully!\n\n" +
-                    "Profile:       ${result.mode.displayName}\n" +
-                    "Secret Key:    '${getActivePassphrase()}'\n" +
-                    "Signal Energy: ${"%.1f".format(result.preamblePeakEnergy)}  [$snrQuality]\n" +
-                    "Threshold:     ${result.mode.detectionThreshold}\n" +
-                    "Lock Sample:   #${result.preambleEndSample}\n" +
-                    "Decryption:    AES-128-CTR verified",
+                setReceiveStatus(
+                    "✅ Message recovered successfully!\n\n" +
+                    "Signal Quality: $snrQuality  (Energy: ${"%.1f".format(result.preamblePeakEnergy)})\n" +
+                    "Profile:        ${result.mode.displayName}\n" +
+                    "Carrier:        Ultrasonic (17–20 kHz)\n" +
+                    "Security:       AES-128-CTR verified",
                     StatusState.SUCCESS,
-                    "DECODE SUCCESS"
+                    "SUCCESS"
                 )
+
+                // Populate technical engineering details
+                binding.txtEngineeringDetails.text =
+                    "• Mode: ${result.mode.displayName}\n" +
+                    "• Peak Preamble Energy: ${"%.2f".format(result.preamblePeakEnergy)} (Threshold: ${result.mode.detectionThreshold})\n" +
+                    "• Preamble Lock Sample: #${result.preambleEndSample}\n" +
+                    "• Normalization: PCM 32768.0\n" +
+                    "• Key Derived: SHA-256 (first 16 bytes)"
             }
 
             is Decoder.DecodeResult.NoSignal -> {
                 binding.layoutDecodedResult.visibility = View.GONE
-                setStatus(
-                    "✗ No ultrasonic carrier detected.\n\n" +
-                    "Profile:       ${result.mode.displayName}\n" +
-                    "Max Energy:    ${"%.1f".format(result.maxPreambleEnergy)} (Threshold: ${result.threshold})\n\n" +
-                    "Checklist to fix:\n" +
-                    "  • If testing over-the-air: Turn speaker volume up and bring phones within range\n" +
-                    "  • If using 20 km file transfer: Use 'Share Audio File' and pick the received file\n" +
-                    "  • Verify BOTH phones have the same profile selected",
+                setReceiveStatus(
+                    "❌ No ultrasonic signal detected.\n\n" +
+                    "Energy: ${"%.1f".format(result.maxPreambleEnergy)} (Threshold: ${result.threshold})\n\n" +
+                    "How to fix:\n" +
+                    "  1. Increase the sender phone's speaker volume.\n" +
+                    "  2. Bring the phones closer together (10–50 cm).\n" +
+                    "  3. Make sure both phones use the same Transmission Profile.",
                     StatusState.NO_SIGNAL,
-                    "NO SIGNAL DETECTED"
+                    "NO SIGNAL"
                 )
             }
 
             is Decoder.DecodeResult.NoPreambleLock -> {
                 binding.layoutDecodedResult.visibility = View.GONE
-                setStatus(
-                    "✗ Preamble energy was detected, but lock failed.\n\n" +
-                    "Peak Energy:   ${"%.1f".format(result.preamblePeakEnergy)} (Threshold: ${result.threshold})\n" +
-                    "Profile:       ${result.mode.displayName}\n\n" +
-                    "Check speaker volume or verify both sides use identical profiles.",
+                setReceiveStatus(
+                    "❌ Signal detected, but could not lock onto message.\n\n" +
+                    "Peak Energy: ${"%.1f".format(result.preamblePeakEnergy)} (Threshold: ${result.threshold})\n\n" +
+                    "Check speaker volume, reduce background room noise, and verify both phones use the same profile.",
                     StatusState.NO_PREAMBLE_LOCK,
-                    "PREAMBLE LOCK FAILED"
+                    "LOCK FAILED"
                 )
             }
 
             is Decoder.DecodeResult.DecryptFailed -> {
                 binding.layoutDecodedResult.visibility = View.GONE
-                setStatus(
-                    "✗ Decryption failed — key mismatch or bit errors.\n\n" +
-                    "Profile:       ${result.mode.displayName}\n" +
-                    "Active Key:    '${getActivePassphrase()}'\n" +
-                    "Preamble Lock: sample #${result.preambleEndSample}\n" +
-                    "Length Header: ${result.cipherLength} bytes\n" +
-                    "Failure:       ${result.reason}\n\n" +
+                setReceiveStatus(
+                    "❌ Unable to Decode\n\n" +
+                    "Secret key mismatch or corrupted payload.\n" +
+                    "The audio was detected, but the message could not be recovered with this secret key.\n\n" +
                     "Check: Verify that both sender and receiver are using the EXACT same Secret Key.",
                     StatusState.DECRYPT_FAILED,
-                    "DECRYPTION FAILED"
+                    "KEY MISMATCH"
                 )
             }
 
             is Decoder.DecodeResult.GarbageOutput -> {
                 binding.layoutDecodedResult.visibility = View.GONE
-                setStatus(
-                    "✗ Secret Key Mismatch or Corrupted Payload!\n\n" +
-                    "Active Key:    '${getActivePassphrase()}'\n" +
-                    "Raw Output:    \"${result.rawDecrypted.take(35)}…\"\n\n" +
-                    "AES-CTR decryption with an incorrect secret key decrypts ciphertext into random non-readable bytes.\n\n" +
-                    "Troubleshooting:\n" +
-                    "  1. Verify the Secret Passphrase matches the sender's key exactly.\n" +
-                    "  2. If using Over-the-Air transmission, reduce background noise.",
+                setReceiveStatus(
+                    "❌ Unable to Decode: Secret Key Mismatch!\n\n" +
+                    "The audio was received, but decrypting with this secret key produced unreadable data.\n\n" +
+                    "How to fix:\n" +
+                    "  • Verify both phones have the EXACT same Secret Key entered.\n" +
+                    "  • If keys match, acoustic room noise may have corrupted the sound.",
                     StatusState.GARBAGE_OUTPUT,
                     "WRONG KEY"
                 )
@@ -552,146 +650,110 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // ── UI helpers ─────────────────────────────────────────────────────
+    // ── Status Styling Helpers ─────────────────────────────────────────
 
-    private fun setStatus(text: String, state: StatusState = StatusState.IDLE, badge: String? = null) {
-        val style = when (state) {
+    private fun setSendStatus(text: String, state: StatusState = StatusState.IDLE, badge: String? = null) {
+        val style = getStyleConfig(state)
+        binding.cardSendStatus.setCardBackgroundColor(ContextCompat.getColor(this, style.bgColorRes))
+        binding.cardSendStatus.strokeColor = ContextCompat.getColor(this, style.strokeColorRes)
+        binding.imgSendStatusIcon.setImageResource(style.iconRes)
+        binding.imgSendStatusIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this, style.iconTintRes))
+        binding.txtSendStatusHeader.setTextColor(ContextCompat.getColor(this, style.titleColorRes))
+        binding.txtSendStatus.setTextColor(ContextCompat.getColor(this, style.textColorRes))
+        binding.txtSendStatus.text = text
+
+        if (badge != null) {
+            binding.txtSendStatusBadge.text = badge
+            binding.txtSendStatusBadge.setBackgroundResource(style.badgeBgRes)
+            binding.txtSendStatusBadge.setTextColor(ContextCompat.getColor(this, style.badgeTextRes))
+        }
+        binding.progressSend.visibility = if (style.showProgress) View.VISIBLE else View.GONE
+    }
+
+    private fun setReceiveStatus(text: String, state: StatusState = StatusState.IDLE, badge: String? = null) {
+        val style = getStyleConfig(state)
+        binding.cardReceiveStatus.setCardBackgroundColor(ContextCompat.getColor(this, style.bgColorRes))
+        binding.cardReceiveStatus.strokeColor = ContextCompat.getColor(this, style.strokeColorRes)
+        binding.imgReceiveStatusIcon.setImageResource(style.iconRes)
+        binding.imgReceiveStatusIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this, style.iconTintRes))
+        binding.txtReceiveStatusHeader.setTextColor(ContextCompat.getColor(this, style.titleColorRes))
+        binding.txtReceiveStatus.setTextColor(ContextCompat.getColor(this, style.textColorRes))
+        binding.txtReceiveStatus.text = text
+
+        if (badge != null) {
+            binding.txtReceiveStatusBadge.text = badge
+            binding.txtReceiveStatusBadge.setBackgroundResource(style.badgeBgRes)
+            binding.txtReceiveStatusBadge.setTextColor(ContextCompat.getColor(this, style.badgeTextRes))
+        }
+        binding.progressReceive.visibility = if (style.showProgress) View.VISIBLE else View.GONE
+    }
+
+    private fun getStyleConfig(state: StatusState): StyleConfig {
+        return when (state) {
             StatusState.IDLE -> StyleConfig(
-                R.color.status_idle_bg,
-                R.color.status_idle_stroke,
-                R.drawable.bg_badge_idle,
-                R.color.status_idle_badge_text,
-                R.color.status_idle_text,
-                R.color.status_idle_title,
-                R.color.status_idle_icon,
-                R.drawable.ic_info,
-                false
+                R.color.status_idle_bg, R.color.status_idle_stroke, R.drawable.bg_badge_idle,
+                R.color.status_idle_badge_text, R.color.status_idle_text, R.color.status_idle_title,
+                R.color.status_idle_icon, R.drawable.ic_info, false
             )
             StatusState.IN_PROGRESS -> StyleConfig(
-                R.color.status_progress_bg,
-                R.color.status_progress_stroke,
-                R.drawable.bg_badge_progress,
-                R.color.status_progress_badge_text,
-                R.color.status_progress_text,
-                R.color.status_progress_title,
-                R.color.status_progress_icon,
-                R.drawable.ic_waveform,
-                true
+                R.color.status_progress_bg, R.color.status_progress_stroke, R.drawable.bg_badge_progress,
+                R.color.status_progress_badge_text, R.color.status_progress_text, R.color.status_progress_title,
+                R.color.status_progress_icon, R.drawable.ic_waveform, true
             )
             StatusState.SUCCESS -> StyleConfig(
-                R.color.status_success_bg,
-                R.color.status_success_stroke,
-                R.drawable.bg_badge_success,
-                R.color.status_success_badge_text,
-                R.color.status_success_text,
-                R.color.status_success_title,
-                R.color.status_success_icon,
-                R.drawable.ic_check_circle,
-                false
+                R.color.status_success_bg, R.color.status_success_stroke, R.drawable.bg_badge_success,
+                R.color.status_success_badge_text, R.color.status_success_text, R.color.status_success_title,
+                R.color.status_success_icon, R.drawable.ic_check_circle, false
             )
             StatusState.NO_SIGNAL -> StyleConfig(
-                R.color.status_nosignal_bg,
-                R.color.status_nosignal_stroke,
-                R.drawable.bg_badge_nosignal,
-                R.color.status_nosignal_badge_text,
-                R.color.status_nosignal_text,
-                R.color.status_nosignal_title,
-                R.color.status_nosignal_icon,
-                R.drawable.ic_signal_off,
-                false
+                R.color.status_nosignal_bg, R.color.status_nosignal_stroke, R.drawable.bg_badge_nosignal,
+                R.color.status_nosignal_badge_text, R.color.status_nosignal_text, R.color.status_nosignal_title,
+                R.color.status_nosignal_icon, R.drawable.ic_signal_off, false
             )
             StatusState.NO_PREAMBLE_LOCK -> StyleConfig(
-                R.color.status_preamble_bg,
-                R.color.status_preamble_stroke,
-                R.drawable.bg_badge_preamble,
-                R.color.status_preamble_badge_text,
-                R.color.status_preamble_text,
-                R.color.status_preamble_title,
-                R.color.status_preamble_icon,
-                R.drawable.ic_lock_open,
-                false
+                R.color.status_preamble_bg, R.color.status_preamble_stroke, R.drawable.bg_badge_preamble,
+                R.color.status_preamble_badge_text, R.color.status_preamble_text, R.color.status_preamble_title,
+                R.color.status_preamble_icon, R.drawable.ic_warning, false
             )
             StatusState.DECRYPT_FAILED -> StyleConfig(
-                R.color.status_decrypt_bg,
-                R.color.status_decrypt_stroke,
-                R.drawable.bg_badge_decrypt,
-                R.color.status_decrypt_badge_text,
-                R.color.status_decrypt_text,
-                R.color.status_decrypt_title,
-                R.color.status_decrypt_icon,
-                R.drawable.ic_key_off,
-                false
+                R.color.status_decrypt_bg, R.color.status_decrypt_stroke, R.drawable.bg_badge_decrypt,
+                R.color.status_decrypt_badge_text, R.color.status_decrypt_text, R.color.status_decrypt_title,
+                R.color.status_decrypt_icon, R.drawable.ic_key_off, false
             )
             StatusState.GARBAGE_OUTPUT -> StyleConfig(
-                R.color.status_garbage_bg,
-                R.color.status_garbage_stroke,
-                R.drawable.bg_badge_garbage,
-                R.color.status_garbage_badge_text,
-                R.color.status_garbage_text,
-                R.color.status_garbage_title,
-                R.color.status_garbage_icon,
-                R.drawable.ic_code_off,
-                false
+                R.color.status_garbage_bg, R.color.status_garbage_stroke, R.drawable.bg_badge_garbage,
+                R.color.status_garbage_badge_text, R.color.status_garbage_text, R.color.status_garbage_title,
+                R.color.status_garbage_icon, R.drawable.ic_code_off, false
             )
             StatusState.WARNING -> StyleConfig(
-                R.color.status_nosignal_bg,
-                R.color.status_nosignal_stroke,
-                R.drawable.bg_badge_nosignal,
-                R.color.status_nosignal_badge_text,
-                R.color.status_nosignal_text,
-                R.color.status_nosignal_title,
-                R.color.status_nosignal_icon,
-                R.drawable.ic_warning,
-                false
+                R.color.status_nosignal_bg, R.color.status_nosignal_stroke, R.drawable.bg_badge_nosignal,
+                R.color.status_nosignal_badge_text, R.color.status_nosignal_text, R.color.status_nosignal_title,
+                R.color.status_nosignal_icon, R.drawable.ic_warning, false
             )
             StatusState.ERROR -> StyleConfig(
-                R.color.status_error_bg,
-                R.color.status_error_stroke,
-                R.drawable.bg_badge_error,
-                R.color.status_error_badge_text,
-                R.color.status_error_text,
-                R.color.status_error_title,
-                R.color.status_error_icon,
-                R.drawable.ic_error,
-                false
+                R.color.status_error_bg, R.color.status_error_stroke, R.drawable.bg_badge_error,
+                R.color.status_error_badge_text, R.color.status_error_text, R.color.status_error_title,
+                R.color.status_error_icon, R.drawable.ic_error, false
             )
         }
-
-        binding.cardStatus.setCardBackgroundColor(ContextCompat.getColor(this, style.bgColor))
-        binding.cardStatus.strokeColor = ContextCompat.getColor(this, style.strokeColor)
-        binding.imgStatusIcon.setImageResource(style.iconRes)
-        binding.imgStatusIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this, style.iconColor))
-        binding.txtStatusHeader.setTextColor(ContextCompat.getColor(this, style.titleColor))
-        binding.txtStatusBadge.text = badge ?: state.name.replace('_', ' ')
-        binding.txtStatusBadge.setBackgroundResource(style.badgeBgRes)
-        binding.txtStatusBadge.setTextColor(ContextCompat.getColor(this, style.badgeTextColor))
-        binding.txtStatus.setTextColor(ContextCompat.getColor(this, style.textColor))
-        binding.dividerStatus.setBackgroundColor(ContextCompat.getColor(this, style.strokeColor))
-        binding.progressStatus.visibility = if (style.inProgress) View.VISIBLE else View.GONE
-        binding.txtStatus.text = text
     }
 
     private data class StyleConfig(
-        val bgColor: Int,
-        val strokeColor: Int,
+        val bgColorRes: Int,
+        val strokeColorRes: Int,
         val badgeBgRes: Int,
-        val badgeTextColor: Int,
-        val textColor: Int,
-        val titleColor: Int,
-        val iconColor: Int,
+        val badgeTextRes: Int,
+        val textColorRes: Int,
+        val titleColorRes: Int,
+        val iconTintRes: Int,
         val iconRes: Int,
-        val inProgress: Boolean
+        val showProgress: Boolean
     )
 
     private fun setBothButtonsEnabled(enabled: Boolean) {
-        binding.btnSend.isEnabled        = enabled
+        binding.btnSend.isEnabled = enabled
         binding.btnExportAudio.isEnabled = enabled
-        binding.btnListen.isEnabled      = enabled
-        binding.btnPickFile.isEnabled    = enabled
-        val alpha = if (enabled) 1.0f else 0.5f
-        binding.btnSend.alpha        = alpha
-        binding.btnExportAudio.alpha = alpha
-        binding.btnListen.alpha      = alpha
-        binding.btnPickFile.alpha    = alpha
+        binding.btnListen.isEnabled = enabled
+        binding.btnPickFile.isEnabled = enabled
     }
 }

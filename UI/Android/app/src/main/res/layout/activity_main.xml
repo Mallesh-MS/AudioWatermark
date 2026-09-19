@@ -1,118 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
     android:background="@color/bg_app">
 
-    <LinearLayout
+    <!-- Main Content Container with Tabs -->
+    <FrameLayout
+        android:id="@+id/contentFrame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:clipToPadding="false">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="64dp">
 
-        <!-- ── App Header ───────────────────────────────────────────── -->
-        <LinearLayout
+        <!-- ================================================================= -->
+        <!-- TAB 1: HOME TAB                                                   -->
+        <!-- ================================================================= -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/tabHome"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="16dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="4dp">
-
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@drawable/ic_waveform"
-                    app:tint="@color/primary"
-                    android:layout_marginEnd="8dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Acoustic Data Watermark"
-                    android:textSize="21sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Audio Steganography &amp; Watermarking • Local Acoustic or 20 km File Transfer"
-                android:textSize="12sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginBottom="8dp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="AES-CTR 128"
-                    android:textSize="10sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/primary"
-                    android:background="@drawable/bg_badge_primary"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="3dp"
-                    android:layout_marginEnd="6dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="17–20 kHz Carrier"
-                    android:textSize="10sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/secondary"
-                    android:background="@drawable/bg_badge_secondary"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="3dp"
-                    android:layout_marginEnd="6dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="20 km / Worldwide File Share"
-                    android:textSize="10sp"
-                    android:textStyle="bold"
-                    android:textColor="#7C3AED"
-                    android:background="@drawable/bg_badge_tertiary"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="3dp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- ── Range Profile Selector Card ──────────────────────────── -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardRangeProfile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="14dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:strokeWidth="1.5dp"
-            app:strokeColor="@color/range_card_stroke"
-            app:cardBackgroundColor="@color/range_card_bg">
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="14dp">
+                android:padding="20dp">
 
+                <!-- App Header -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -121,247 +39,349 @@
                     android:layout_marginBottom="6dp">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_radar"
-                        app:tint="@color/range_accent"
-                        android:layout_marginEnd="8dp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="ENCODING PROFILE"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/range_accent"
-                        android:letterSpacing="0.05" />
-
-                    <TextView
-                        android:id="@+id/txtRangeBadge"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="STANDARD"
-                        android:textSize="10sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/range_accent"
-                        android:background="@drawable/bg_badge_primary"
-                        android:paddingHorizontal="8dp"
-                        android:paddingVertical="3dp" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Select matching profile for both sender &amp; receiver:"
-                    android:textSize="11sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="10dp" />
-
-                <!-- Segmented Mode Selector Buttons -->
-                <com.google.android.material.button.MaterialButtonToggleGroup
-                    android:id="@+id/toggleGroupRange"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:singleSelection="true"
-                    app:selectionRequired="true"
-                    android:layout_marginBottom="8dp">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnModeStandard"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:text="⚡ Standard (Fast)"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        app:icon="@drawable/ic_bolt"
-                        app:iconSize="16dp"
-                        app:iconGravity="textStart" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnModeLongRange"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:text="📡 High Robustness"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        app:icon="@drawable/ic_radar"
-                        app:iconSize="16dp"
-                        app:iconGravity="textStart" />
-                </com.google.android.material.button.MaterialButtonToggleGroup>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:id="@+id/txtRangeDescription"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="10 bps • Fast transmission"
-                        android:textSize="11sp"
-                        android:textColor="@color/text_secondary" />
-
-                    <TextView
-                        android:id="@+id/txtEstimatedDuration"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="~4.2 s duration"
-                        android:textSize="11sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary" />
-                </LinearLayout>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- ── Security & Secret Key Card ───────────────────────────── -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardSecretKey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="14dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:strokeWidth="1.5dp"
-            app:strokeColor="#C7D2FE"
-            app:cardBackgroundColor="@color/surface_card">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="14dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="4dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
                         android:src="@drawable/ic_lock"
-                        app:tint="#4338CA"
-                        android:layout_marginEnd="8dp" />
+                        app:tint="@color/primary"
+                        android:layout_marginEnd="12dp" />
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="SECRET KEY / PASSPHRASE (AES-128)"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:textColor="#4338CA"
-                        android:letterSpacing="0.05" />
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/txtKeyBadge"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="PROTECTED"
-                        android:textSize="10sp"
-                        android:textStyle="bold"
-                        android:textColor="#4338CA"
-                        android:background="@drawable/bg_badge_primary"
-                        android:paddingHorizontal="8dp"
-                        android:paddingVertical="3dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Secure Audio Message"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Hide text in sound • Recover securely"
+                            android:textSize="13sp"
+                            android:textColor="@color/text_secondary" />
+                    </LinearLayout>
                 </LinearLayout>
 
-                <TextView
+                <!-- Onboarding Banner (Dismissable) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardOnboarding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Shared secret key used to encrypt and decrypt. Both sender &amp; receiver phones must have matching keys to read the message."
-                    android:textSize="11sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="10dp" />
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#BFDBFE"
+                    app:cardBackgroundColor="#EFF6FF">
 
-                <!-- Secret Key Input -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutSecretKey"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:startIconDrawable="@drawable/ic_lock"
-                    app:startIconTint="#4338CA"
-                    app:endIconMode="password_toggle"
-                    android:hint="Secret Passphrase">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editSecretKey"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPassword"
-                        android:text="signal-processing-project-2026"
-                        android:maxLines="1"
-                        android:textSize="13sp"
-                        android:fontFamily="monospace" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-                <!-- Quick Key Presets -->
-                <HorizontalScrollView
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="👋 Welcome to Audio Steganography"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:textColor="#1E40AF" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnDismissOnboarding"
+                                style="@style/Widget.Material3.Button.TextButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:text="Dismiss"
+                                android:textSize="11sp"
+                                android:textColor="#1E40AF" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Send private text messages through sound waves or digital audio files. Messages are encrypted with a secret key so only your intended receiver can read them."
+                            android:textSize="12sp"
+                            android:textColor="#1E3A8A"
+                            android:lineSpacingMultiplier="1.2"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="8dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Section: What do you want to do? -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WHAT DO YOU WANT TO DO?"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_muted"
+                    android:letterSpacing="0.05"
+                    android:layout_marginBottom="10dp" />
+
+                <!-- Action Card 1: Send Message -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardHomeGoSend"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scrollbars="none">
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:strokeWidth="1.5dp"
+                    app:strokeColor="#BFDBFE"
+                    app:cardBackgroundColor="@color/surface_card"
+                    android:clickable="true"
+                    android:focusable="true">
 
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/chipGroupKeyPresets"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:singleLine="true">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="18dp">
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipDefaultKey"
-                            style="@style/Widget.Material3.Chip.Assist"
+                        <ImageView
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:src="@drawable/ic_send_nav"
+                            app:tint="@color/primary"
+                            android:background="@drawable/bg_badge_primary"
+                            android:padding="10dp"
+                            android:layout_marginEnd="16dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="📤 Send a Message"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Hide secret text inside audio &amp; transmit"
+                                android:textSize="13sp"
+                                android:textColor="@color/text_secondary"
+                                android:layout_marginTop="2dp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_arrow_forward"
+                            app:tint="@color/primary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Action Card 2: Receive Message -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardHomeGoReceive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:strokeWidth="1.5dp"
+                    app:strokeColor="#99F6E4"
+                    app:cardBackgroundColor="@color/surface_card"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="18dp">
+
+                        <ImageView
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:src="@drawable/ic_receive_nav"
+                            app:tint="@color/secondary"
+                            android:background="@drawable/bg_badge_secondary"
+                            android:padding="10dp"
+                            android:layout_marginEnd="16dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="📥 Receive a Message"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Listen via microphone OR decode audio file"
+                                android:textSize="13sp"
+                                android:textColor="@color/text_secondary"
+                                android:layout_marginTop="2dp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_arrow_forward"
+                            app:tint="@color/secondary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Recent Activity & Status Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/card_stroke"
+                    app:cardBackgroundColor="@color/surface_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="🔑 Default Key"
-                            android:textSize="11sp" />
+                            android:text="RECENT ACTIVITY"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_muted"
+                            android:letterSpacing="0.05"
+                            android:layout_marginBottom="6dp" />
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipCustomKey"
-                            style="@style/Widget.Material3.Chip.Assist"
+                        <TextView
+                            android:id="@+id/txtHomeRecentActivity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ready — transmit nearby over speaker, or share watermarked audio file across 20 km."
+                            android:textSize="13sp"
+                            android:textColor="@color/text_primary"
+                            android:lineSpacingMultiplier="1.2" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Quick Visual Guide -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/card_stroke"
+                    app:cardBackgroundColor="@color/surface_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="🛡 Custom Pass: TOP_SECRET_42"
-                            android:textSize="11sp" />
+                            android:text="HOW IT WORKS IN 3 STEPS"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_muted"
+                            android:letterSpacing="0.05"
+                            android:layout_marginBottom="12dp" />
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipWrongKey"
-                            style="@style/Widget.Material3.Chip.Assist"
-                            android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="❌ Test Wrong Key: INVALID_KEY"
-                            android:textSize="11sp" />
-                    </com.google.android.material.chip.ChipGroup>
-                </HorizontalScrollView>
+                            android:text="1️⃣ Enter Secret Message &amp; Secret Key"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginBottom="2dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Your message is encrypted with AES-128 using your key."
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="2️⃣ Send Sound OR Share Audio File"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginBottom="2dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Play ultrasonic sound to a nearby phone, or send a WAV file over WhatsApp/Telegram across 20 km."
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="3️⃣ Receiver Recovers Message"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginBottom="2dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="With the matching secret key, the original text is recovered instantly."
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.core.widget.NestedScrollView>
 
-        <!-- ── Person A: Transmit Card ──────────────────────────────── -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardPersonA"
+        <!-- ================================================================= -->
+        <!-- TAB 2: SEND TAB                                                   -->
+        <!-- ================================================================= -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/tabSend"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="14dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:strokeWidth="1.5dp"
-            app:strokeColor="@color/person_a_stroke"
-            app:cardBackgroundColor="@color/person_a_bg">
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -369,376 +389,1076 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="4dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_lock"
-                        app:tint="@color/primary"
-                        android:layout_marginEnd="8dp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="PERSON A — TRANSMIT / EXPORT"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/person_a_header"
-                        android:letterSpacing="0.05" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Encrypt secret message into ultrasonic audio"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="10dp" />
-
-                <!-- Quick Preset Chips -->
+                <!-- Send Header -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="QUICK TEST PRESETS:"
-                    android:textSize="10sp"
+                    android:text="📤 Send Hidden Message"
+                    android:textSize="22sp"
                     android:textStyle="bold"
-                    android:textColor="@color/text_muted"
-                    android:layout_marginBottom="4dp" />
+                    android:textColor="@color/text_primary" />
 
-                <HorizontalScrollView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hide text inside audio and transmit"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- ── Step 1: Message Input Card ────────────────────────── -->
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scrollbars="none"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/card_stroke"
+                    app:cardBackgroundColor="@color/surface_card">
 
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/chipGroupPresets"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:singleLine="true">
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipPresetHello"
-                            style="@style/Widget.Material3.Chip.Assist"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="👋 HELLO"
-                            android:textSize="11sp" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipPresetPass"
-                            style="@style/Widget.Material3.Chip.Assist"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🔑 PASS_2026"
-                            android:textSize="11sp" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipPresetPay"
-                            style="@style/Widget.Material3.Chip.Assist"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="💳 PAY_100"
-                            android:textSize="11sp" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipPresetRange"
-                            style="@style/Widget.Material3.Chip.Assist"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🌐 SHARE_20KM"
-                            android:textSize="11sp" />
-                    </com.google.android.material.chip.ChipGroup>
-                </HorizontalScrollView>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutMessage"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="30"
-                    app:startIconDrawable="@drawable/ic_lock"
-                    app:startIconTint="@color/primary"
-                    android:hint="Secret message to hide">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editMessage"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:text="HELLO"
-                        android:maxLines="1"
-                        android:textSize="14sp" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchCarrierMode"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="STEP 1 — ENTER YOUR MESSAGE"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/primary"
+                            android:letterSpacing="0.05"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Type the secret text you want to hide:"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginBottom="10dp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layoutMessage"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            app:boxCornerRadiusTopStart="12dp"
+                            app:boxCornerRadiusTopEnd="12dp"
+                            app:boxCornerRadiusBottomStart="12dp"
+                            app:boxCornerRadiusBottomEnd="12dp"
+                            app:counterEnabled="true"
+                            app:counterMaxLength="30"
+                            app:startIconDrawable="@drawable/ic_lock"
+                            app:startIconTint="@color/primary"
+                            android:hint="Type your secret message...">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editMessage"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:text="HELLO"
+                                android:maxLines="1"
+                                android:textSize="15sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <!-- Quick Presets with Descriptions -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="QUICK TEST MESSAGES:"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_muted"
+                            android:layout_marginBottom="4dp" />
+
+                        <HorizontalScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:scrollbars="none">
+
+                            <com.google.android.material.chip.ChipGroup
+                                android:id="@+id/chipGroupPresets"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:singleLine="true">
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/chipPresetHello"
+                                    style="@style/Widget.Material3.Chip.Assist"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="👋 HELLO"
+                                    android:textSize="11sp" />
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/chipPresetPass"
+                                    style="@style/Widget.Material3.Chip.Assist"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="🔑 PASS_2026"
+                                    android:textSize="11sp" />
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/chipPresetPay"
+                                    style="@style/Widget.Material3.Chip.Assist"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="💳 PAY_100"
+                                    android:textSize="11sp" />
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/chipPresetRange"
+                                    style="@style/Widget.Material3.Chip.Assist"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="🌐 SHARE_20KM"
+                                    android:textSize="11sp" />
+                            </com.google.android.material.chip.ChipGroup>
+                        </HorizontalScrollView>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- ── Step 2: Audio Method Card ─────────────────────────── -->
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Pure Ultrasonic Carrier (No Music)"
-                    android:textColor="@color/text_primary"
-                    android:textSize="13sp"
-                    android:checked="true"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/card_stroke"
+                    app:cardBackgroundColor="@color/surface_card">
 
-                <!-- Action 1: Play over speaker (Local range) -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="STEP 2 — CHOOSE AUDIO METHOD"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/primary"
+                            android:letterSpacing="0.05"
+                            android:layout_marginBottom="8dp" />
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switchCarrierMode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="🔊 Pure Ultrasonic Sound"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:checked="true" />
+
+                        <TextView
+                            android:id="@+id/txtCarrierDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="High-frequency sound (17–20 kHz) that is difficult for human ears to hear."
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="6dp" />
+
+                        <!-- Expandable Info -->
+                        <TextView
+                            android:id="@+id/btnExplainCarrier"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ⓘ How does this work?"
+                            android:textSize="12sp"
+                            android:textColor="@color/primary"
+                            android:textStyle="bold"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:paddingVertical="4dp" />
+
+                        <TextView
+                            android:id="@+id/txtCarrierDetailPanel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="• Pure Ultrasonic sends continuous high-frequency waves (17–20 kHz) through air.\n• Embed in Music hides the encoded data underneath host music using psychoacoustic masking."
+                            android:textSize="11sp"
+                            android:textColor="@color/text_secondary"
+                            android:lineSpacingMultiplier="1.2"
+                            android:visibility="gone"
+                            android:layout_marginTop="6dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- ── Step 3: Reliability Mode Card ─────────────────────── -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/card_stroke"
+                    app:cardBackgroundColor="@color/surface_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="STEP 3 — CHOOSE RELIABILITY"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/primary"
+                            android:letterSpacing="0.05"
+                            android:layout_marginBottom="8dp" />
+
+                        <com.google.android.material.button.MaterialButtonToggleGroup
+                            android:id="@+id/toggleGroupRange"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:singleSelection="true"
+                            app:selectionRequired="true"
+                            android:layout_marginBottom="6dp">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnModeStandard"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="50dp"
+                                android:layout_weight="1"
+                                android:text="⚡ Standard"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                app:icon="@drawable/ic_bolt"
+                                app:iconSize="16dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnModeLongRange"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="50dp"
+                                android:layout_weight="1"
+                                android:text="📡 High Robust"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                app:icon="@drawable/ic_radar"
+                                app:iconSize="16dp" />
+                        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/txtRangeDescription"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Faster · 10 bps · Normal conditions"
+                                android:textSize="11sp"
+                                android:textColor="@color/text_secondary" />
+
+                            <TextView
+                                android:id="@+id/txtEstimatedDuration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="~4.2 s duration"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="💡 Not sure? Use High Robustness in noisy rooms."
+                            android:textSize="11sp"
+                            android:textColor="@color/text_muted"
+                            android:layout_marginTop="4dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- ── Step 4: Security Card ─────────────────────────────── -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1.5dp"
+                    app:strokeColor="#C7D2FE"
+                    app:cardBackgroundColor="@color/surface_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="4dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="STEP 4 — SECURITY &amp; SECRET KEY"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="#4338CA"
+                                android:letterSpacing="0.05" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="ENCRYPTED"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:textColor="#4338CA"
+                                android:background="@drawable/bg_badge_primary"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="🔐 Your message is protected. The receiver MUST use the exact same secret key to recover it."
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginBottom="8dp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layoutSecretKey"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:boxCornerRadiusTopStart="12dp"
+                            app:boxCornerRadiusTopEnd="12dp"
+                            app:boxCornerRadiusBottomStart="12dp"
+                            app:boxCornerRadiusBottomEnd="12dp"
+                            app:startIconDrawable="@drawable/ic_lock"
+                            app:startIconTint="#4338CA"
+                            app:endIconMode="password_toggle"
+                            android:hint="Enter secret key">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editSecretKey"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPassword"
+                                android:text="signal-processing-project-2026"
+                                android:maxLines="1"
+                                android:textSize="14sp"
+                                android:fontFamily="monospace" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <HorizontalScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:scrollbars="none">
+
+                            <com.google.android.material.chip.ChipGroup
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:singleLine="true">
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/chipDefaultKey"
+                                    style="@style/Widget.Material3.Chip.Assist"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="🔑 Default Key"
+                                    android:textSize="11sp" />
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/chipCustomKey"
+                                    style="@style/Widget.Material3.Chip.Assist"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="🛡 Custom: TOP_SECRET_42"
+                                    android:textSize="11sp" />
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/chipWrongKey"
+                                    style="@style/Widget.Material3.Chip.Assist"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="❌ Test Wrong Key"
+                                    android:textSize="11sp" />
+                            </com.google.android.material.chip.ChipGroup>
+                        </HorizontalScrollView>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- ── Action Buttons ────────────────────────────────────── -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSend"
                     style="@style/Widget.Material3.Button"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="Transmit Over Speaker (Nearby)"
+                    android:layout_height="56dp"
+                    android:text="🔊  SEND MESSAGE OVER SPEAKER"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    app:cornerRadius="12dp"
+                    app:cornerRadius="14dp"
                     app:icon="@drawable/ic_play_arrow"
                     app:iconGravity="textStart"
                     app:iconPadding="8dp"
-                    android:layout_marginBottom="8dp" />
+                    android:layout_marginBottom="10dp" />
 
-                <!-- Action 2: Export & Share File (20 km / Worldwide) -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnExportAudio"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="Share Audio File (20 km / Any Distance)"
+                    android:layout_height="54dp"
+                    android:text="🌍  Share Audio File (20 km / Any Distance)"
                     android:textSize="13sp"
                     android:textStyle="bold"
-                    app:cornerRadius="12dp"
+                    app:cornerRadius="14dp"
                     app:icon="@drawable/ic_share"
                     app:iconGravity="textStart"
-                    app:iconPadding="8dp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- ── Person B: Receive Card ───────────────────────────────── -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardPersonB"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="14dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:strokeWidth="1.5dp"
-            app:strokeColor="@color/person_b_stroke"
-            app:cardBackgroundColor="@color/person_b_bg">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="4dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_mic"
-                        app:tint="@color/secondary"
-                        android:layout_marginEnd="8dp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="PERSON B — RECEIVE / DECODE"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/person_b_header"
-                        android:letterSpacing="0.05" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Decode live from microphone OR decode a received audio file"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="12dp" />
-
-                <!-- Action 1: Listen via mic (Nearby) -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnListen"
-                    style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="🎙  Listen &amp; Decode via Mic  (20 s)"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/on_secondary_container"
-                    app:backgroundTint="@color/secondary_container"
-                    app:cornerRadius="12dp"
-                    app:icon="@drawable/ic_mic"
-                    app:iconTint="@color/on_secondary_container"
-                    app:iconGravity="textStart"
                     app:iconPadding="8dp"
-                    android:layout_marginBottom="8dp" />
+                    android:layout_marginBottom="16dp" />
 
-                <!-- Action 2: Pick and Decode File (20 km / Any Distance) -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnPickFile"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="📂 Pick &amp; Decode File (20 km / Shared File)"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="12dp"
-                    app:icon="@drawable/ic_folder_open"
-                    app:iconGravity="textStart"
-                    app:iconPadding="8dp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- ── Status Card (Dynamic Diagnostics) ────────────────────── -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:strokeWidth="1.5dp"
-            app:strokeColor="@color/status_idle_stroke"
-            app:cardBackgroundColor="@color/status_idle_bg">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <LinearLayout
+                <!-- Transmission Status Panel -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardSendStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1.5dp"
+                    app:strokeColor="@color/status_idle_stroke"
+                    app:cardBackgroundColor="@color/status_idle_bg">
 
-                    <ImageView
-                        android:id="@+id/imgStatusIcon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_info"
-                        app:tint="@color/status_idle_icon"
-                        android:layout_marginEnd="10dp" />
-
-                    <TextView
-                        android:id="@+id/txtStatusHeader"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="STATUS &amp; DIAGNOSTICS"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/status_idle_title"
-                        android:letterSpacing="0.05" />
-
-                    <TextView
-                        android:id="@+id/txtStatusBadge"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="IDLE"
-                        android:textSize="10sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/status_idle_badge_text"
-                        android:background="@drawable/bg_badge_idle"
-                        android:paddingHorizontal="8dp"
-                        android:paddingVertical="3dp" />
-                </LinearLayout>
-
-                <com.google.android.material.progressindicator.LinearProgressIndicator
-                    android:id="@+id/progressStatus"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:indeterminate="true"
-                    android:visibility="gone"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="10dp"
-                    app:indicatorColor="@color/primary"
-                    app:trackColor="@color/primary_container"
-                    app:trackCornerRadius="4dp" />
-
-                <!-- Decoded Success Output Container -->
-                <LinearLayout
-                    android:id="@+id/layoutDecodedResult"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    android:background="@drawable/bg_badge_success"
-                    android:padding="12dp"
-                    android:layout_marginBottom="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="DECODED MESSAGE:"
-                        android:textSize="10sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/status_success_title"
-                        android:layout_marginBottom="4dp" />
-
-                    <TextView
-                        android:id="@+id/txtDecodedMessage"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="[MESSAGE]"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/status_success_text"
-                        android:layout_marginBottom="8dp" />
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnCopyMessage"
-                        style="@style/Widget.Material3.Button.TonalButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="38dp"
-                        android:text="Copy Text"
-                        android:textSize="12sp"
-                        app:icon="@drawable/ic_copy"
-                        app:iconSize="16dp"
-                        app:cornerRadius="8dp" />
-                </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="6dp">
 
-                <View
-                    android:id="@+id/dividerStatus"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/status_idle_stroke"
-                    android:layout_marginBottom="12dp" />
+                            <ImageView
+                                android:id="@+id/imgSendStatusIcon"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:src="@drawable/ic_info"
+                                app:tint="@color/status_idle_icon"
+                                android:layout_marginEnd="8dp" />
+
+                            <TextView
+                                android:id="@+id/txtSendStatusHeader"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="TRANSMITTER STATUS"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/status_idle_title"
+                                android:letterSpacing="0.05" />
+
+                            <TextView
+                                android:id="@+id/txtSendStatusBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="READY"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/status_idle_badge_text"
+                                android:background="@drawable/bg_badge_idle"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp" />
+                        </LinearLayout>
+
+                        <com.google.android.material.progressindicator.LinearProgressIndicator
+                            android:id="@+id/progressSend"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:indeterminate="true"
+                            android:visibility="gone"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="8dp"
+                            app:indicatorColor="@color/primary"
+                            app:trackColor="@color/primary_container" />
+
+                        <TextView
+                            android:id="@+id/txtSendStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ready — tap Send Message over Speaker, or export a watermarked file to share across 20 km."
+                            android:textSize="13sp"
+                            android:textColor="@color/status_idle_text"
+                            android:lineSpacingMultiplier="1.2" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- ================================================================= -->
+        <!-- TAB 3: RECEIVE TAB                                                -->
+        <!-- ================================================================= -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/tabReceive"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Receive Header -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📥 Receive Message"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary" />
 
                 <TextView
-                    android:id="@+id/txtStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Recover hidden text from nearby sound OR an audio file"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Proximity Guide Card -->
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ready — transmit locally via speaker, or share audio file over WhatsApp/Drive across 20 km."
-                    android:textSize="13sp"
-                    android:textColor="@color/status_idle_text"
-                    android:lineSpacingMultiplier="1.3"
-                    android:fontFamily="monospace" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    android:layout_marginBottom="14dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#99F6E4"
+                    app:cardBackgroundColor="#F0FDFA">
 
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="NEARBY SOUND TRANSFER GUIDE"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#0F766E"
+                            android:letterSpacing="0.05"
+                            android:layout_marginBottom="6dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="🔊 Speaker  ━━━━ 📡 Ultrasonic Sound ━━━━►  🎤 Mic"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="#115E59"
+                            android:gravity="center"
+                            android:layout_marginVertical="6dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="1. Hold phones near each other (10–50 cm).\n2. Tap 'Listen Nearby' below.\n3. Press 'Transmit' on the sending phone."
+                            android:textSize="12sp"
+                            android:textColor="#134E4A"
+                            android:lineSpacingMultiplier="1.2" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Actions Card: Listen or Open File -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="14dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/card_stroke"
+                    app:cardBackgroundColor="@color/surface_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CHOOSE HOW TO RECEIVE"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/secondary"
+                            android:letterSpacing="0.05"
+                            android:layout_marginBottom="10dp" />
+
+                        <!-- Action 1: Listen via mic -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnListen"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp"
+                            android:text="🎙  Listen Nearby via Mic (20 s)"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/on_secondary_container"
+                            app:backgroundTint="@color/secondary_container"
+                            app:cornerRadius="14dp"
+                            app:icon="@drawable/ic_mic"
+                            app:iconTint="@color/on_secondary_container"
+                            app:iconGravity="textStart"
+                            app:iconPadding="8dp"
+                            android:layout_marginBottom="10dp" />
+
+                        <!-- Action 2: Open audio file -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPickFile"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="54dp"
+                            android:text="📁  Open Audio File (20 km / Shared File)"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="14dp"
+                            app:icon="@drawable/ic_folder_open"
+                            app:iconGravity="textStart"
+                            app:iconPadding="8dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Receiver Status & Results Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardReceiveStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1.5dp"
+                    app:strokeColor="@color/status_idle_stroke"
+                    app:cardBackgroundColor="@color/status_idle_bg">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="8dp">
+
+                            <ImageView
+                                android:id="@+id/imgReceiveStatusIcon"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_info"
+                                app:tint="@color/status_idle_icon"
+                                android:layout_marginEnd="10dp" />
+
+                            <TextView
+                                android:id="@+id/txtReceiveStatusHeader"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="RECEIVER STATUS &amp; DIAGNOSTICS"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/status_idle_title"
+                                android:letterSpacing="0.05" />
+
+                            <TextView
+                                android:id="@+id/txtReceiveStatusBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="READY"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/status_idle_badge_text"
+                                android:background="@drawable/bg_badge_idle"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp" />
+                        </LinearLayout>
+
+                        <com.google.android.material.progressindicator.LinearProgressIndicator
+                            android:id="@+id/progressReceive"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:indeterminate="true"
+                            android:visibility="gone"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="10dp"
+                            app:indicatorColor="@color/secondary"
+                            app:trackColor="@color/secondary_container" />
+
+                        <!-- Decoded Success Output Container -->
+                        <LinearLayout
+                            android:id="@+id/layoutDecodedResult"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            android:background="@drawable/bg_badge_success"
+                            android:padding="14dp"
+                            android:layout_marginBottom="12dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginBottom="4dp">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/ic_check_circle"
+                                    app:tint="@color/status_success_icon"
+                                    android:layout_marginEnd="6dp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="RECOVERED MESSAGE:"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/status_success_title" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/txtDecodedMessage"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="[MESSAGE]"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/status_success_text"
+                                android:layout_marginBottom="10dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnCopyMessage"
+                                style="@style/Widget.Material3.Button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="48dp"
+                                android:text="📋  Copy Text"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                app:backgroundTint="#059669"
+                                app:cornerRadius="10dp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/txtReceiveStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ready to receive — tap 'Listen Nearby' to capture sound, or 'Open Audio File' to decode a file."
+                            android:textSize="13sp"
+                            android:textColor="@color/status_idle_text"
+                            android:lineSpacingMultiplier="1.3" />
+
+                        <!-- Expandable Advanced Details for Engineers -->
+                        <TextView
+                            android:id="@+id/btnToggleEngineeringDetails"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="▼ Advanced technical details"
+                            android:textSize="12sp"
+                            android:textColor="@color/secondary"
+                            android:textStyle="bold"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:layout_marginTop="10dp"
+                            android:paddingVertical="4dp" />
+
+                        <TextView
+                            android:id="@+id/txtEngineeringDetails"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="• Frequencies: 17 kHz (Preamble), 18 kHz ('0'), 19.5 kHz ('1')\n• Sampling Rate: 44,100 Hz 16-bit Mono\n• Normalization: [-1.0, 1.0] float (PCM 32768.0)\n• AES-128-CTR with SHA-256 derived key"
+                            android:textSize="11sp"
+                            android:fontFamily="monospace"
+                            android:textColor="@color/text_muted"
+                            android:lineSpacingMultiplier="1.2"
+                            android:visibility="gone"
+                            android:layout_marginTop="6dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- ================================================================= -->
+        <!-- TAB 4: SETTINGS & HELP TAB                                        -->
+        <!-- ================================================================= -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/tabSettings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚙ Settings &amp; Help"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Preferences, accessibility, and guidance"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Card 1: Accessibility -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="14dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/card_stroke"
+                    app:cardBackgroundColor="@color/surface_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ACCESSIBILITY"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/primary"
+                            android:letterSpacing="0.05"
+                            android:layout_marginBottom="8dp" />
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switchReduceMotion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Reduce Motion"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:checked="false" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Disables non-essential animations for smoother performance."
+                            android:textSize="11sp"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginBottom="10dp" />
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switchHighContrast"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="High Contrast Elements"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:checked="true" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Enhances outlines and badge readability for all lighting conditions."
+                            android:textSize="11sp"
+                            android:textColor="@color/text_secondary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Card 2: Audio Hardware Status -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="14dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/card_stroke"
+                    app:cardBackgroundColor="@color/surface_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="AUDIO HARDWARE STATUS"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/secondary"
+                            android:letterSpacing="0.05"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:id="@+id/txtMicPermissionStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="🎙 Microphone Permission: Granted"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="• Audio Format: 44.1 kHz, 16-bit PCM Mono\n• Hardware Source: UNPROCESSED (Noise suppression bypassed)\n• Ultrasonic Bandwidth: 17,000 Hz – 20,000 Hz"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:lineSpacingMultiplier="1.2" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Card 3: Frequently Asked Questions -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/card_stroke"
+                    app:cardBackgroundColor="@color/surface_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="FREQUENTLY ASKED QUESTIONS"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_muted"
+                            android:letterSpacing="0.05"
+                            android:layout_marginBottom="10dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="❓ What is audio steganography?"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginBottom="2dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Audio steganography hides private text inside sound so that the presence of the message is not obvious to listeners."
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginBottom="10dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="❓ What is a secret key?"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginBottom="2dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="A secret key encrypts your text using AES-128. Both the sender and receiver phones must enter the exact same key to recover the message."
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginBottom="10dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="❓ Why can't I decode the message?"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginBottom="2dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Common causes:\n• Secret key mismatch (check passphrase)\n• Room noise or phones too far apart (bring phones within 50 cm)\n• Audio compression (send WAV as 'Document' in WhatsApp to avoid compression)\n• Microphone volume too low"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:lineSpacingMultiplier="1.2" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </FrameLayout>
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_gravity="bottom"
+        android:background="@color/surface_card"
+        app:elevation="8dp"
+        app:itemIconTint="@color/primary"
+        app:itemTextColor="@color/primary"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
