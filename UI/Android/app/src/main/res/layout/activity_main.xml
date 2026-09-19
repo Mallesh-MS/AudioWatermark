@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp"
+        android:padding="16dp"
         android:clipToPadding="false">
 
         <!-- ── App Header ───────────────────────────────────────────── -->
@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="16dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -30,8 +30,8 @@
                 android:layout_marginBottom="4dp">
 
                 <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:src="@drawable/ic_waveform"
                     app:tint="@color/primary"
                     android:layout_marginEnd="8dp" />
@@ -39,8 +39,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Audio Watermark Demo"
-                    android:textSize="22sp"
+                    android:text="Acoustic Data Watermark"
+                    android:textSize="21sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary" />
             </LinearLayout>
@@ -48,11 +48,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Acoustic steganography via inaudible carrier embedding (Speaker → Mic)"
-                android:textSize="13sp"
+                android:text="Audio Steganography &amp; Watermarking • Local Acoustic or 20 km File Transfer"
+                android:textSize="12sp"
                 android:textColor="@color/text_secondary"
-                android:lineSpacingMultiplier="1.2"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginBottom="8dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -74,7 +73,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="20 kHz Carrier"
+                    android:text="17–20 kHz Carrier"
                     android:textSize="10sp"
                     android:textStyle="bold"
                     android:textColor="@color/secondary"
@@ -86,7 +85,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Goertzel Filter"
+                    android:text="20 km / Worldwide File Share"
                     android:textSize="10sp"
                     android:textStyle="bold"
                     android:textColor="#7C3AED"
@@ -96,12 +95,268 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- ── Range Profile Selector Card ──────────────────────────── -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardRangeProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1.5dp"
+            app:strokeColor="@color/range_card_stroke"
+            app:cardBackgroundColor="@color/range_card_bg">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="6dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_radar"
+                        app:tint="@color/range_accent"
+                        android:layout_marginEnd="8dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="ENCODING PROFILE"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/range_accent"
+                        android:letterSpacing="0.05" />
+
+                    <TextView
+                        android:id="@+id/txtRangeBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="STANDARD"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/range_accent"
+                        android:background="@drawable/bg_badge_primary"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="3dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Select matching profile for both sender &amp; receiver:"
+                    android:textSize="11sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="10dp" />
+
+                <!-- Segmented Mode Selector Buttons -->
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/toggleGroupRange"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:singleSelection="true"
+                    app:selectionRequired="true"
+                    android:layout_marginBottom="8dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnModeStandard"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="⚡ Standard (Fast)"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:icon="@drawable/ic_bolt"
+                        app:iconSize="16dp"
+                        app:iconGravity="textStart" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnModeLongRange"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="📡 High Robustness"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:icon="@drawable/ic_radar"
+                        app:iconSize="16dp"
+                        app:iconGravity="textStart" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/txtRangeDescription"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="10 bps • Fast transmission"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_secondary" />
+
+                    <TextView
+                        android:id="@+id/txtEstimatedDuration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="~4.2 s duration"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── Security & Secret Key Card ───────────────────────────── -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardSecretKey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1.5dp"
+            app:strokeColor="#C7D2FE"
+            app:cardBackgroundColor="@color/surface_card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="4dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_lock"
+                        app:tint="#4338CA"
+                        android:layout_marginEnd="8dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="SECRET KEY / PASSPHRASE (AES-128)"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="#4338CA"
+                        android:letterSpacing="0.05" />
+
+                    <TextView
+                        android:id="@+id/txtKeyBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PROTECTED"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="#4338CA"
+                        android:background="@drawable/bg_badge_primary"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="3dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Shared secret key used to encrypt and decrypt. Both sender &amp; receiver phones must have matching keys to read the message."
+                    android:textSize="11sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="10dp" />
+
+                <!-- Secret Key Input -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutSecretKey"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:startIconDrawable="@drawable/ic_lock"
+                    app:startIconTint="#4338CA"
+                    app:endIconMode="password_toggle"
+                    android:hint="Secret Passphrase">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editSecretKey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:text="signal-processing-project-2026"
+                        android:maxLines="1"
+                        android:textSize="13sp"
+                        android:fontFamily="monospace" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Quick Key Presets -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupKeyPresets"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:singleLine="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipDefaultKey"
+                            style="@style/Widget.Material3.Chip.Assist"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🔑 Default Key"
+                            android:textSize="11sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipCustomKey"
+                            style="@style/Widget.Material3.Chip.Assist"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🛡 Custom Pass: TOP_SECRET_42"
+                            android:textSize="11sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipWrongKey"
+                            style="@style/Widget.Material3.Chip.Assist"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="❌ Test Wrong Key: INVALID_KEY"
+                            android:textSize="11sp" />
+                    </com.google.android.material.chip.ChipGroup>
+                </HorizontalScrollView>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- ── Person A: Transmit Card ──────────────────────────────── -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardPersonA"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="14dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
             app:strokeWidth="1.5dp"
@@ -132,7 +387,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="PERSON A — TRANSMIT"
+                        android:text="PERSON A — TRANSMIT / EXPORT"
                         android:textSize="12sp"
                         android:textStyle="bold"
                         android:textColor="@color/person_a_header"
@@ -142,17 +397,73 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Hide an encrypted message inside host_song.wav &amp; play"
+                    android:text="Encrypt secret message into ultrasonic audio"
                     android:textSize="12sp"
                     android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="10dp" />
+
+                <!-- Quick Preset Chips -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="QUICK TEST PRESETS:"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_muted"
+                    android:layout_marginBottom="4dp" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:layout_marginBottom="10dp">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupPresets"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:singleLine="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipPresetHello"
+                            style="@style/Widget.Material3.Chip.Assist"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="👋 HELLO"
+                            android:textSize="11sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipPresetPass"
+                            style="@style/Widget.Material3.Chip.Assist"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🔑 PASS_2026"
+                            android:textSize="11sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipPresetPay"
+                            style="@style/Widget.Material3.Chip.Assist"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="💳 PAY_100"
+                            android:textSize="11sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipPresetRange"
+                            style="@style/Widget.Material3.Chip.Assist"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🌐 SHARE_20KM"
+                            android:textSize="11sp" />
+                    </com.google.android.material.chip.ChipGroup>
+                </HorizontalScrollView>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutMessage"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="10dp"
                     app:boxCornerRadiusTopStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
@@ -161,27 +472,54 @@
                     app:counterMaxLength="30"
                     app:startIconDrawable="@drawable/ic_lock"
                     app:startIconTint="@color/primary"
-                    android:hint="Secret message to hide (max ~30 chars)">
+                    android:hint="Secret message to hide">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editMessage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text"
+                        android:text="HELLO"
                         android:maxLines="1"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switchCarrierMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pure Ultrasonic Carrier (No Music)"
+                    android:textColor="@color/text_primary"
+                    android:textSize="13sp"
+                    android:checked="true"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Action 1: Play over speaker (Local range) -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSend"
                     style="@style/Widget.Material3.Button"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:text="Encrypt, Embed &amp; Play"
-                    android:textSize="15sp"
+                    android:layout_height="50dp"
+                    android:text="Transmit Over Speaker (Nearby)"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     app:cornerRadius="12dp"
                     app:icon="@drawable/ic_play_arrow"
+                    app:iconGravity="textStart"
+                    app:iconPadding="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Action 2: Export & Share File (20 km / Worldwide) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnExportAudio"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Share Audio File (20 km / Any Distance)"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp"
+                    app:icon="@drawable/ic_share"
                     app:iconGravity="textStart"
                     app:iconPadding="8dp" />
             </LinearLayout>
@@ -192,7 +530,7 @@
             android:id="@+id/cardPersonB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="14dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
             app:strokeWidth="1.5dp"
@@ -223,7 +561,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="PERSON B — RECEIVE"
+                        android:text="PERSON B — RECEIVE / DECODE"
                         android:textSize="12sp"
                         android:textStyle="bold"
                         android:textColor="@color/person_b_header"
@@ -233,24 +571,40 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Record 20s audio buffer, lock preamble &amp; extract payload"
+                    android:text="Decode live from microphone OR decode a received audio file"
                     android:textSize="12sp"
                     android:textColor="@color/text_secondary"
                     android:layout_marginBottom="12dp" />
 
+                <!-- Action 1: Listen via mic (Nearby) -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnListen"
                     style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:text="🎙  Listen &amp; Decode  (20 s)"
-                    android:textSize="15sp"
+                    android:layout_height="50dp"
+                    android:text="🎙  Listen &amp; Decode via Mic  (20 s)"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     android:textColor="@color/on_secondary_container"
                     app:backgroundTint="@color/secondary_container"
                     app:cornerRadius="12dp"
                     app:icon="@drawable/ic_mic"
                     app:iconTint="@color/on_secondary_container"
+                    app:iconGravity="textStart"
+                    app:iconPadding="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Action 2: Pick and Decode File (20 km / Any Distance) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPickFile"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="📂 Pick &amp; Decode File (20 km / Shared File)"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp"
+                    app:icon="@drawable/ic_folder_open"
                     app:iconGravity="textStart"
                     app:iconPadding="8dp" />
             </LinearLayout>
@@ -325,6 +679,48 @@
                     app:trackColor="@color/primary_container"
                     app:trackCornerRadius="4dp" />
 
+                <!-- Decoded Success Output Container -->
+                <LinearLayout
+                    android:id="@+id/layoutDecodedResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:background="@drawable/bg_badge_success"
+                    android:padding="12dp"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DECODED MESSAGE:"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/status_success_title"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:id="@+id/txtDecodedMessage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="[MESSAGE]"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/status_success_text"
+                        android:layout_marginBottom="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCopyMessage"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:text="Copy Text"
+                        android:textSize="12sp"
+                        app:icon="@drawable/ic_copy"
+                        app:iconSize="16dp"
+                        app:cornerRadius="8dp" />
+                </LinearLayout>
+
                 <View
                     android:id="@+id/dividerStatus"
                     android:layout_width="match_parent"
@@ -336,7 +732,7 @@
                     android:id="@+id/txtStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Idle — type a message and tap a button."
+                    android:text="Ready — transmit locally via speaker, or share audio file over WhatsApp/Drive across 20 km."
                     android:textSize="13sp"
                     android:textColor="@color/status_idle_text"
                     android:lineSpacingMultiplier="1.3"

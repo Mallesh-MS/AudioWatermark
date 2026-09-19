@@ -18,6 +18,21 @@
     <color name="surface_card">#FFFFFF</color>
     <color name="text_primary">#0F172A</color>
     <color name="text_secondary">#64748B</color>
+    <color name="text_muted">#94A3B8</color>
+
+    <!-- Chips & Presets -->
+    <color name="chip_bg">#F1F5F9</color>
+    <color name="chip_stroke">#CBD5E1</color>
+    <color name="chip_text">#334155</color>
+    <color name="success_message_bg">#F0FDF4</color>
+    <color name="success_message_border">#86EFAC</color>
+    <color name="success_message_text">#14532D</color>
+
+    <!-- Range Profile Section -->
+    <color name="range_card_bg">#FFFFFF</color>
+    <color name="range_card_stroke">#E2E8F0</color>
+    <color name="range_accent">#4F46E5</color>
+    <color name="range_badge_bg">#EEF2FF</color>
 
     <!-- Person A Section -->
     <color name="person_a_bg">#FFFFFF</color>

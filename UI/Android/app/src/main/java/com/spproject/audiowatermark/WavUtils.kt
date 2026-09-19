@@ -1,15 +1,15 @@
-﻿package com.spproject.audiowatermark
+package com.spproject.audiowatermark
 
 import android.content.Context
 import java.io.File
 import java.io.FileOutputStream
+import java.io.InputStream
 
 /**
  * WAV file I/O — reads and writes 44100 Hz / mono / 16-bit PCM.
  *
- * Required host-song format (convert with ffmpeg if needed):
- *   ffmpeg -i your_song.mp3 -ar 44100 -ac 1 -sample_fmt s16 host_song.wav
- * Then place host_song.wav in app/src/main/res/raw/.
+ * Required host-song format:
+ *   44100 Hz, 16-bit PCM WAV (mono or stereo).
  */
 object WavUtils {
 
@@ -17,23 +17,28 @@ object WavUtils {
 
     /**
      * Loads a WAV resource from res/raw into a normalized [-1.0, 1.0] DoubleArray.
-     *
-     * Supports mono and stereo input; stereo is downmixed to mono by averaging
-     * the two channels.  Sample rate MUST be [Config.SAMPLE_RATE] (validated).
-     *
-     * @param context Android context used to open the resource.
-     * @param resId   R.raw.host_song (or any other WAV resource ID).
-     * @throws IllegalArgumentException if the file is not a valid WAV, not 16-bit
-     *                                  PCM, or has the wrong sample rate.
      */
     fun loadWavAsDoubles(context: Context, resId: Int): DoubleArray {
         val bytes = context.resources.openRawResource(resId).use { it.readBytes() }
+        return parseWavBytes(bytes)
+    }
 
-        // Parse RIFF/WAVE header iterating over chunks
+    /**
+     * Loads a WAV from any [InputStream] into a normalized [-1.0, 1.0] DoubleArray.
+     */
+    fun loadWavFromStreamAsDoubles(inputStream: InputStream): DoubleArray {
+        val bytes = inputStream.use { it.readBytes() }
+        return parseWavBytes(bytes)
+    }
+
+    /**
+     * Parses RIFF/WAVE PCM bytes into normalized [-1.0, 1.0] doubles.
+     */
+    private fun parseWavBytes(bytes: ByteArray): DoubleArray {
         require(bytes.size >= 12 &&
                 String(bytes, 0, 4, Charsets.US_ASCII) == "RIFF" &&
                 String(bytes, 8, 4, Charsets.US_ASCII) == "WAVE") {
-            "Not a RIFF/WAVE file"
+            "Not a valid RIFF/WAVE file"
         }
 
         var pos = 12
@@ -50,8 +55,7 @@ object WavUtils {
                 "fmt " -> {
                     val audioFormat = readLE16(bytes, pos + 8)   // 1 = PCM
                     require(audioFormat == 1) {
-                        "Only PCM WAV is supported (audioFormat=$audioFormat). " +
-                        "Reconvert with ffmpeg: ffmpeg -i input.mp3 -ar 44100 -ac 1 -sample_fmt s16 host_song.wav"
+                        "Only uncompressed PCM WAV is supported (audioFormat=$audioFormat)."
                     }
                     numChannels = readLE16(bytes, pos + 10)
                     sampleRate  = readLE32(bytes, pos + 12)
@@ -62,18 +66,16 @@ object WavUtils {
                     dataSize   = chunkSize
                 }
             }
-            // Chunks are padded to even byte boundaries
             pos += 8 + chunkSize + (chunkSize and 1)
             if (dataOffset != -1) break
         }
 
-        require(dataOffset != -1)  { "No 'data' chunk found — is this a valid WAV?" }
+        require(dataOffset != -1)  { "No 'data' chunk found in WAV." }
         require(bitsPerSample == 16) {
-            "Expected 16-bit PCM, got ${bitsPerSample}-bit. Reconvert with ffmpeg -sample_fmt s16."
+            "Expected 16-bit PCM, got ${bitsPerSample}-bit."
         }
         require(sampleRate == Config.SAMPLE_RATE) {
-            "Host WAV is $sampleRate Hz but Config.SAMPLE_RATE is ${Config.SAMPLE_RATE} Hz. " +
-            "Reconvert: ffmpeg -i song.mp3 -ar ${Config.SAMPLE_RATE} -ac 1 -sample_fmt s16 host_song.wav"
+            "Audio file is $sampleRate Hz, but app expects ${Config.SAMPLE_RATE} Hz."
         }
 
         val totalFrames = dataSize / (numChannels * 2)   // 2 bytes per 16-bit sample
@@ -99,12 +101,6 @@ object WavUtils {
     /**
      * Writes normalized [-1.0, 1.0] [samples] to a 44100 Hz / mono / 16-bit
      * PCM WAV file at [outFile].
-     *
-     * Useful for saving the watermarked audio to internal storage so you can
-     * inspect it offline (e.g. open in Audacity via adb pull).
-     *
-     * @param samples  Normalized PCM — e.g. the output of [Embedder.embed].
-     * @param outFile  Destination file; will be created/overwritten.
      */
     fun writeWav(samples: DoubleArray, outFile: File) {
         val numSamples = samples.size
@@ -146,10 +142,9 @@ object WavUtils {
     private fun readLE16(b: ByteArray, offset: Int): Int =
         (b[offset].toInt() and 0xFF) or ((b[offset + 1].toInt() and 0xFF) shl 8)
 
-    /** Reads a signed 16-bit little-endian integer. */
     private fun readLE16Signed(b: ByteArray, offset: Int): Int {
         val lo = b[offset].toInt() and 0xFF
-        val hi = b[offset + 1].toInt()          // sign-extending toInt()
+        val hi = b[offset + 1].toInt()
         return (hi shl 8) or lo
     }
 

@@ -1,4 +1,4 @@
-﻿package com.spproject.audiowatermark
+package com.spproject.audiowatermark
 
 import java.security.MessageDigest
 import javax.crypto.Cipher
@@ -52,6 +52,10 @@ object AesCrypto {
         return cipher.doFinal(plainText.toByteArray(Charsets.UTF_8))
     }
 
+    /** Encrypts [plainText] using a custom passphrase. */
+    fun encrypt(plainText: String, passphrase: String): ByteArray =
+        encrypt(plainText, deriveKey(passphrase))
+
     /**
      * Decrypts [cipherBytes] with the derived key and the fixed IV.
      * Throws [javax.crypto.BadPaddingException] / [IllegalArgumentException]
@@ -62,4 +66,8 @@ object AesCrypto {
         cipher.init(Cipher.DECRYPT_MODE, key, FIXED_IV)
         return String(cipher.doFinal(cipherBytes), Charsets.UTF_8)
     }
+
+    /** Decrypts [cipherBytes] using a custom passphrase. */
+    fun decrypt(cipherBytes: ByteArray, passphrase: String): String =
+        decrypt(cipherBytes, deriveKey(passphrase))
 }

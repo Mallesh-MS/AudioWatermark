@@ -1,0 +1,23 @@
+# Android build & Gradle
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+captures
+.externalNativeBuild
+.cxx
+*.apk
+app/build/
+UI/Android/app/build/
+UI/Android/.gradle/
+UI/Android/build/
+
+# Dart / Flutter
+.dart_tool/
+.packages
+
+# Scratch & temporary
+scratch/
+test_phone.ps1

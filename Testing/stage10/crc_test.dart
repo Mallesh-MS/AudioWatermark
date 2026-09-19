@@ -79,9 +79,11 @@ void main() {
         expect(preambleEnd, isNotNull);
         final payloadSampleOffset = preambleEnd! + (24 * symbolSamples) +
           (2 * symbolSamples);
+      final b0 = Decoder.goertzelMagnitude(corruptedSamples, payloadSampleOffset, bit0Freq);
+      final b1 = Decoder.goertzelMagnitude(corruptedSamples, payloadSampleOffset, bit1Freq);
+      final flipFreq = (b0 >= b1) ? bit1Freq : bit0Freq;
       for (int i = 0; i < symbolSamples; i++) {
-        // Overwrite symbol with pure 19500Hz tone at full amplitude to flip bit value
-        corruptedSamples[payloadSampleOffset + i] = sin(2 * pi * bit1Freq * i / sampleRate) * 0.5;
+        corruptedSamples[payloadSampleOffset + i] = sin(2 * pi * flipFreq * i / sampleRate) * 0.5;
       }
 
       // Checksum protects against silent corruption: returns null rather than garbled plaintext

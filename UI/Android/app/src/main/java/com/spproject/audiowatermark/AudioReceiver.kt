@@ -1,4 +1,4 @@
-﻿package com.spproject.audiowatermark
+package com.spproject.audiowatermark
 
 import android.annotation.SuppressLint
 import android.media.AudioFormat
@@ -11,13 +11,6 @@ import android.util.Log
 /**
  * Records a fixed 20-second window of microphone audio, then passes it to
  * [Decoder.decode] for processing.
- *
- * Design rationale for the fixed-window approach:
- *  • Simple and predictable: the UI shows a countdown and the user knows
- *    exactly when to start playing Person A's phone.
- *  • Avoids the complexity of streaming buffer management / real-time
- *    preamble detection.  Good enough for a first working demo; once this
- *    is end-to-end verified you can add streaming detection.
  *
  * CALLER MUST have RECORD_AUDIO permission granted before calling [listen].
  */
@@ -37,11 +30,13 @@ class AudioReceiver(
     /**
      * Starts recording for [listenDurationSec] seconds on a background thread.
      * Calls [onResult] on the main thread with the [Decoder.DecodeResult].
-     *
-     * The caller must have already obtained RECORD_AUDIO permission.
      */
     @SuppressLint("MissingPermission")
-    fun listen(onResult: (Decoder.DecodeResult) -> Unit) {
+    fun listen(
+        mode: Config.RangeMode = Config.activeMode,
+        passphrase: String = Config.SHARED_PASSPHRASE,
+        onResult: (Decoder.DecodeResult) -> Unit
+    ) {
         stopRequested = false
 
         Thread {
@@ -53,25 +48,45 @@ class AudioReceiver(
             val totalSamples = Config.SAMPLE_RATE * listenDurationSec
             val recBufBytes = maxOf(minBuf, READ_CHUNK * 2)
 
-            val recorder = AudioRecord(
-                MediaRecorder.AudioSource.MIC,
-                Config.SAMPLE_RATE,
-                AudioFormat.CHANNEL_IN_MONO,
-                AudioFormat.ENCODING_PCM_16BIT,
-                recBufBytes
+            val sourcesToTry = listOf(
+                MediaRecorder.AudioSource.UNPROCESSED,
+                MediaRecorder.AudioSource.VOICE_RECOGNITION,
+                MediaRecorder.AudioSource.MIC
             )
+            var activeRecorder: AudioRecord? = null
+            for (source in sourcesToTry) {
+                try {
+                    val candidate = AudioRecord(
+                        source,
+                        Config.SAMPLE_RATE,
+                        AudioFormat.CHANNEL_IN_MONO,
+                        AudioFormat.ENCODING_PCM_16BIT,
+                        recBufBytes
+                    )
+                    if (candidate.state == AudioRecord.STATE_INITIALIZED) {
+                        activeRecorder = candidate
+                        Log.d(TAG, "AudioRecord initialized using source: $source")
+                        break
+                    } else {
+                        candidate.release()
+                    }
+                } catch (e: Exception) {
+                    Log.w(TAG, "AudioSource $source failed to construct: ${e.message}")
+                }
+            }
 
-            if (recorder.state != AudioRecord.STATE_INITIALIZED) {
-                Log.e(TAG, "AudioRecord failed to initialize")
+            if (activeRecorder == null || activeRecorder.state != AudioRecord.STATE_INITIALIZED) {
+                Log.e(TAG, "AudioRecord failed to initialize with any source")
                 mainHandler.post {
-                    onResult(Decoder.DecodeResult.NoSignal(0.0, 0.0))
+                    onResult(Decoder.DecodeResult.NoSignal(0.0, mode.detectionThreshold, mode))
                 }
                 return@Thread
             }
+            val recorder = activeRecorder
 
             val buffer = ShortArray(totalSamples)
             recorder.startRecording()
-            Log.d(TAG, "Recording started: $listenDurationSec s target")
+            Log.d(TAG, "Recording started: $listenDurationSec s target (mode=${mode.displayName})")
 
             var read = 0
             val startMs = System.currentTimeMillis()
@@ -80,7 +95,6 @@ class AudioReceiver(
                 val got = recorder.read(buffer, read, toRead)
                 if (got > 0) {
                     read += got
-                    // Fire progress callback (elapsed seconds) on main thread
                     val elapsedSec = ((System.currentTimeMillis() - startMs) / 1000L).toInt()
                     mainHandler.post { onProgressSec?.invoke(elapsedSec) }
                 } else if (got < 0) {
@@ -94,7 +108,7 @@ class AudioReceiver(
             Log.d(TAG, "Recording finished: $read samples captured")
 
             val captured = DoubleArray(read) { i -> buffer[i] / 32768.0 }
-            val result = Decoder.decode(captured)
+            val result = Decoder.decode(captured, mode = mode, passphrase = passphrase)
 
             mainHandler.post { onResult(result) }
         }.apply {

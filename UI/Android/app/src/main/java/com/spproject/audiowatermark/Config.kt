@@ -1,4 +1,4 @@
-﻿package com.spproject.audiowatermark
+package com.spproject.audiowatermark
 
 /**
  * Shared constants used by BOTH the transmitter and receiver.
@@ -14,22 +14,20 @@
  * AND have enough separation to avoid spectral leakage bleed-over.
  * A conservative rule is: |f1 − f2| ≥ 2 × Δf_bin.
  *
- * We choose N = SYMBOL_SAMPLES = Fs × SYMBOL_DURATION_MS / 1000:
+ * Standard Mode (100 ms):
  *   Fs               = 44 100 Hz
  *   SYMBOL_DURATION  = 100 ms  → N = 4 410 samples
  *   Δf_bin           = 44 100 / 4 410 = 10.0 Hz  (exact integer)
  *
- * Our three tones and their bin indices (k = round(N × f / Fs)):
- *   PREAMBLE  17 000 Hz → k = round(4410 × 17000 / 44100) = round(1700.0) = 1700
- *   BIT_0     18 000 Hz → k = round(4410 × 18000 / 44100) = round(1800.0) = 1800
- *   BIT_1     19 500 Hz → k = round(4410 × 19500 / 44100) = round(1950.0) = 1950
+ * Long-Range Mode (250 ms):
+ *   SYMBOL_DURATION  = 250 ms  → N = 11 025 samples
+ *   Δf_bin           = 44 100 / 11 025 = 4.0 Hz   (exact integer)
+ *   Higher coherent processing gain (+9.5 dB SNR) & narrower noise integration window!
  *
- * Separations in bins (= in Hz because Δf_bin = 10 Hz):
- *   BIT_1 − BIT_0     = 150 bins = 1 500 Hz   (150 × Δf_bin)  ✓ >> 2 bins
- *   BIT_0 − PREAMBLE  = 100 bins = 1 000 Hz   (100 × Δf_bin)  ✓ >> 2 bins
- *
- * All three land EXACTLY on bin centres (zero fractional-bin error), so the
- * Goertzel filter sees maximum energy with zero inter-bin leakage.
+ * Tones:
+ *   PREAMBLE  17 000 Hz
+ *   BIT_0     18 000 Hz
+ *   BIT_1     19 500 Hz
  * ──────────────────────────────────────────────────────────────────────────
  */
 object Config {
@@ -37,45 +35,58 @@ object Config {
     /** Audio pipeline sample rate — must match the host WAV and AudioRecord/AudioTrack setup. */
     const val SAMPLE_RATE = 44100           // Hz
 
-    // ── Preamble tone ──────────────────────────────────────────────────────
-    /** 17 000 Hz — distinct from both bit frequencies; receiver locks onto this. */
+    // ── Carrier frequencies ───────────────────────────────────────────────
     const val PREAMBLE_FREQ = 17000.0       // Hz
-    /**
-     * 300 ms preamble = 3× a normal symbol.  That gives the receiver a
-     * 150 ms half-symbol sliding step to lock onto preamble start even if
-     * the capture begins mid-tone.
-     */
-    const val PREAMBLE_DURATION_MS = 300    // ms
+    const val FREQ_BIT_0    = 18000.0       // Hz
+    const val FREQ_BIT_1    = 19500.0       // Hz
 
-    // ── Data tones ─────────────────────────────────────────────────────────
-    const val FREQ_BIT_0 = 18000.0          // Hz  (see bin math above)
-    const val FREQ_BIT_1 = 19500.0          // Hz
     /**
-     * 100 ms per bit → 10 bits/s raw throughput.
-     * A 10-char ASCII message ≈ 10 bytes cipher → 80 data bits + 8 header bits
-     * = 88 bits × 100 ms = 8.8 s payload + 0.3 s preamble ≈ 9.1 s total.
+     * Transmission Profile / Range Mode.
+     * Both phones must be in the same mode to communicate!
      */
-    const val SYMBOL_DURATION_MS = 100      // ms
+    enum class RangeMode(
+        val symbolDurationMs: Int,
+        val preambleDurationMs: Int,
+        val defaultAmplitude: Double,
+        val detectionThreshold: Double,
+        val displayName: String,
+        val description: String
+    ) {
+        /** Fast transmission (10 bps), optimal for close range (0–1.5 meters). */
+        STANDARD(
+            symbolDurationMs = 100,
+            preambleDurationMs = 300,
+            defaultAmplitude = 0.15,
+            detectionThreshold = 2.0,
+            displayName = "Standard (0–1.5m)",
+            description = "10 bps • Fast transfer"
+        ),
 
-    // ── Embedding level ────────────────────────────────────────────────────
-    /**
-     * WATERMARK_AMPLITUDE = 0.08 = 8 % of full scale (≈ −21.9 dBFS).
-     *
-     * Why 0.08?
-     *  • Host WAV peaks are typically ≈ 0.90 FS.  Worst-case mix:
-     *      0.90 + 0.08 = 0.98 FS — safely below 1.0 (no clipping).
-     *  • 8 % is inaudible under music (masking) but at −22 dBFS the signal
-     *    survives the speaker→air→mic path (typ. −20 to −30 dB attenuation)
-     *    with enough headroom above the phone mic noise floor (~−45 dBFS).
-     *  • Tune upward (e.g. 0.12) if detection is unreliable in a noisy room;
-     *    downward if you hear a whistle through the music.
-     */
-    const val WATERMARK_AMPLITUDE = 0.08   // fraction of full scale
+        /** High-penetration mode (4 bps), optimal for across-the-room (2–5+ meters). */
+        LONG_RANGE(
+            symbolDurationMs = 250,
+            preambleDurationMs = 600,
+            defaultAmplitude = 0.22,
+            detectionThreshold = 2.5,
+            displayName = "Long Range (2–5m+)",
+            description = "4 bps • +9.5dB SNR Gain"
+        )
+    }
+
+    /** Active transmission mode across transmitter and receiver. */
+    var activeMode: RangeMode = RangeMode.STANDARD
+
+    /** Backward-compatible accessors forwarding to activeMode */
+    val SYMBOL_DURATION_MS: Int get() = activeMode.symbolDurationMs
+    val PREAMBLE_DURATION_MS: Int get() = activeMode.preambleDurationMs
+    val WATERMARK_AMPLITUDE: Double get() = activeMode.defaultAmplitude
+
+    fun symbolSamples(mode: RangeMode = activeMode): Int =
+        (SAMPLE_RATE * mode.symbolDurationMs / 1000.0).toInt()
+
+    fun preambleSamples(mode: RangeMode = activeMode): Int =
+        (SAMPLE_RATE * mode.preambleDurationMs / 1000.0).toInt()
 
     // ── Shared secret ──────────────────────────────────────────────────────
-    /**
-     * Pre-shared passphrase from which both sides derive the AES key via SHA-256.
-     * KNOWN LIMITATION: hardcoded; a real system would use proper key exchange.
-     */
     const val SHARED_PASSPHRASE = "signal-processing-project-2026"
 }
